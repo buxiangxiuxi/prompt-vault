@@ -57,6 +57,7 @@
       cursor: pointer; background: #fefcf9; color: #8b7a6b; transition: 0.2s;
     }
     .file-upload-area:hover { border-color: #c49a6c; background: #fdf8f2; }
+    .file-info { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
     .btn {
       padding: 11px 22px; border: none; border-radius: 14px; font-weight: 600;
       cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;
@@ -84,10 +85,14 @@
       cursor: pointer; transition: 0.2s;
     }
     .image-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-    .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; }
+    .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; position: relative; }
     .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+    .img-number {
+      position: absolute; top: 6px; left: 6px; background: rgba(196,154,108,0.9); color: white;
+      font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+    }
     .card-info { padding: 10px; font-size: 0.8rem; color: #7a6a5c; }
-    .card-title-text { font-weight: 600; color: #4a3a2e; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .card-prompt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .no-items { grid-column: 1/-1; text-align: center; padding: 40px; color: #8b7a6b; }
 
     .modal-overlay {
@@ -134,25 +139,22 @@
     <p style="color:#8b7a6b;" id="modeHint">访客模式 · 仅浏览</p>
   </div>
 
-  <!-- 添加图片卡片 (仅管理员可见) -->
+  <!-- 添加图片卡片 (仅管理员) -->
   <div class="card admin-only" id="addCard">
-    <div class="card-title">📥 存入新图片</div>
+    <div class="card-title">📥 存入新图片 (可批量)</div>
     <div class="form-grid">
-      <div class="form-group">
-        <label>🏷️ 图片标题</label>
-        <input type="text" id="titleInput" placeholder="给这张图片起个名字...">
-      </div>
       <div class="form-row">
         <div class="form-group" style="flex:2;">
-          <label>🔗 图片URL (推荐)</label>
+          <label>🔗 图片URL (单张)</label>
           <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
         </div>
         <div class="form-group" style="flex:1;">
-          <label>📁 或上传文件</label>
+          <label>📁 或批量上传文件</label>
           <div class="file-upload-area" id="fileUploadArea">
-            <span id="uploadText">点击选择图片</span>
-            <input type="file" id="fileInput" accept="image/*" style="display:none;">
+            <span id="uploadText">点击选择多张图片</span>
+            <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
           </div>
+          <div class="file-info" id="fileCountInfo"></div>
         </div>
       </div>
       <div class="form-group">
@@ -164,8 +166,8 @@
         </select>
       </div>
       <div class="form-group">
-        <label>💬 提示词</label>
-        <textarea id="promptInput" placeholder="输入这张图片的提示词..."></textarea>
+        <label>💬 提示词 (所有图片共用)</label>
+        <textarea id="promptInput" placeholder="输入这批图片的提示词..."></textarea>
       </div>
       <button class="btn btn-primary" id="btnAdd">✨ 存入图片与提示词</button>
     </div>
@@ -174,7 +176,6 @@
   <!-- 图片库卡片 -->
   <div class="card">
     <div class="card-title">🌸 词库浏览</div>
-    <!-- 选项卡 -->
     <div class="tabs" id="categoryTabs">
       <button class="tab-btn active" data-cat="rest">🛋️ 休息的词库</button>
       <button class="tab-btn" data-cat="sun">☀️ Sun的词库</button>
@@ -186,7 +187,7 @@
       <input type="file" id="importFile" accept=".json" style="display:none;">
     </div>
     <div class="search-wrapper">
-      <input type="text" id="searchInput" placeholder="搜索当前词库的标题或提示词...">
+      <input type="text" id="searchInput" placeholder="搜索当前词库的提示词...">
       <span class="search-icon">🔍</span>
     </div>
     <div class="items-header">
@@ -201,7 +202,7 @@
   <div class="modal">
     <img id="modalImage" src="" style="display:none;">
     <div id="modalPlaceholder" style="width:100%;height:200px;background:#f0e9df;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px;">🖼️</div>
-    <h3 id="modalTitleDisplay" style="margin-bottom:4px;"></h3>
+    <h3 id="modalNumberDisplay" style="margin-bottom:4px;"></h3>
     <div class="prompt-box" id="modalPrompt"></div>
     <div class="btn-row">
       <button class="btn btn-primary" id="btnCopyPrompt">📋 复制提示词</button>
@@ -213,15 +214,11 @@
   </div>
 </div>
 
-<!-- 编辑弹窗 -->
+<!-- 编辑弹窗 (仅提示词和分类) -->
 <div class="modal-overlay" id="editOverlay" style="display:none;">
   <div class="modal">
     <h3>✏️ 编辑信息</h3>
     <div class="form-group" style="margin-top:12px;">
-      <label>🏷️ 标题</label>
-      <input type="text" id="editTitle">
-    </div>
-    <div class="form-group">
       <label>📂 词库</label>
       <select id="editCategory">
         <option value="rest">休息的词库</option>
@@ -254,10 +251,10 @@
   (() => {
     const ADMIN_PASSWORD = '5201314';
     let isAdmin = false;
-    let currentCategory = 'rest'; // 当前选中的分类
+    let currentCategory = 'rest';
 
     // ---------- IndexedDB ----------
-    const DB_NAME = 'SunRestWordVault';
+    const DB_NAME = 'SunRestWordVault2';
     let db = null;
     function openDB() {
       return new Promise((resolve, reject) => {
@@ -352,7 +349,7 @@
       return div.innerHTML;
     }
 
-    // ---------- UI 状态 ----------
+    // ---------- 全局状态 ----------
     let items = [];
     let currentItemId = null;
 
@@ -361,11 +358,10 @@
     const adminLoginBtn = document.getElementById('adminLoginBtn');
     const adminLogoutBtn = document.getElementById('adminLogoutBtn');
     const modeHint = document.getElementById('modeHint');
-    const addCard = document.getElementById('addCard');
-    const titleInput = document.getElementById('titleInput');
     const imageUrl = document.getElementById('imageUrl');
     const fileInput = document.getElementById('fileInput');
     const uploadText = document.getElementById('uploadText');
+    const fileCountInfo = document.getElementById('fileCountInfo');
     const promptInput = document.getElementById('promptInput');
     const categorySelect = document.getElementById('categorySelect');
     const btnAdd = document.getElementById('btnAdd');
@@ -376,7 +372,7 @@
     const modalOverlay = document.getElementById('modalOverlay');
     const modalImage = document.getElementById('modalImage');
     const modalPlaceholder = document.getElementById('modalPlaceholder');
-    const modalTitleDisplay = document.getElementById('modalTitleDisplay');
+    const modalNumberDisplay = document.getElementById('modalNumberDisplay');
     const modalPrompt = document.getElementById('modalPrompt');
     const btnCopyPrompt = document.getElementById('btnCopyPrompt');
     const btnEdit = document.getElementById('btnEdit');
@@ -384,7 +380,6 @@
     const btnDeleteItem = document.getElementById('btnDeleteItem');
     const copyFeedback = document.getElementById('copyFeedback');
     const editOverlay = document.getElementById('editOverlay');
-    const editTitle = document.getElementById('editTitle');
     const editCategory = document.getElementById('editCategory');
     const editPrompt = document.getElementById('editPrompt');
     const btnSaveEdit = document.getElementById('btnSaveEdit');
@@ -397,7 +392,6 @@
     const confirmLogin = document.getElementById('confirmLogin');
     const loginError = document.getElementById('loginError');
 
-    // 分类映射
     const categoryNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
 
     function updateUIMode() {
@@ -459,47 +453,92 @@
 
     // ---------- 数据加载 ----------
     async function loadItems() {
-      try { items = await getAllItems(); items.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; }
+      try { items = await getAllItems(); items.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; }
     }
 
-    // 获取当前分类的过滤后图片
+    // 获取指定分类的最大编号
+    function getMaxNumber(category) {
+      const catItems = items.filter(item => item.category === category);
+      if (catItems.length === 0) return 0;
+      return Math.max(...catItems.map(item => item.number || 0));
+    }
+
+    // 获取当前分类过滤后的图片
     function getFilteredItems() {
       const term = searchInput.value.trim().toLowerCase();
       return items.filter(item => {
         if (item.category !== currentCategory) return false;
         if (!term) return true;
-        return item.title.toLowerCase().includes(term) || item.prompt.toLowerCase().includes(term);
-      });
+        return item.prompt.toLowerCase().includes(term);
+      }).sort((a, b) => (a.number || 0) - (b.number || 0)); // 按编号排序
     }
 
     async function addItemHandler() {
       if (!isAdmin) { showToast('只有管理员可以添加图片', false); return; }
-      const title = titleInput.value.trim() || '未命名';
       const prompt = promptInput.value.trim();
       if (!prompt) { showToast('请输入提示词', false); return; }
-      let imageData = null;
+      const category = categorySelect.value;
       const urlValue = imageUrl.value.trim();
-      const file = fileInput.files[0];
+      const files = fileInput.files;
+
+      if (!urlValue && (!files || files.length === 0)) {
+        showToast('请提供图片URL或选择文件', false); return;
+      }
+
+      // 计算新编号起始值
+      const maxNum = getMaxNumber(category);
+      let nextNumber = maxNum + 1;
+
       try {
+        // 处理URL单张
         if (urlValue) {
-          if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) { showToast('URL格式不正确', false); return; }
-          imageData = urlValue;
-        } else if (file) {
-          showToast('正在压缩图片...'); imageData = await compressImage(file);
-        } else { showToast('请提供图片URL或上传文件', false); return; }
-        const newItem = {
-          id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
-          title,
-          imageData,
-          prompt,
-          category: categorySelect.value,
-          createdAt: new Date().toISOString()
-        };
-        await addItem(newItem); await loadItems(); renderGrid();
-        titleInput.value = ''; imageUrl.value = ''; fileInput.value = ''; uploadText.textContent = '点击选择图片'; promptInput.value = '';
+          if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) {
+            showToast('URL格式不正确', false); return;
+          }
+          const newItem = {
+            id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+            number: nextNumber,
+            category,
+            imageData: urlValue,
+            prompt,
+            createdAt: new Date().toISOString()
+          };
+          await addItem(newItem);
+          nextNumber++;
+        }
+
+        // 处理批量文件
+        if (files && files.length > 0) {
+          showToast(`正在压缩并保存 ${files.length} 张图片...`);
+          for (let i = 0; i < files.length; i++) {
+            const file = files[i];
+            const compressed = await compressImage(file);
+            const newItem = {
+              id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6) + i,
+              number: nextNumber,
+              category,
+              imageData: compressed,
+              prompt,
+              createdAt: new Date().toISOString()
+            };
+            await addItem(newItem);
+            nextNumber++;
+          }
+        }
+
+        await loadItems();
+        renderGrid();
+        // 清空表单
+        imageUrl.value = '';
+        fileInput.value = '';
+        uploadText.textContent = '点击选择多张图片';
+        fileCountInfo.textContent = '';
+        promptInput.value = '';
         showToast('✅ 保存成功！');
       } catch (err) {
-        let msg = '保存失败'; if (err.name === 'QuotaExceededError') msg = '存储空间已满'; else if (err.message) msg = err.message;
+        let msg = '保存失败';
+        if (err.name === 'QuotaExceededError') msg = '存储空间已满，请删除一些图片';
+        else if (err.message) msg = err.message;
         showToast('❌ ' + msg, false);
       }
     }
@@ -508,9 +547,13 @@
       if (!isAdmin) { showToast('只有管理员可以删除', false); return; }
       const item = items.find(i => i.id === id);
       if (!item) return;
-      const userInput = prompt(`⚠️ 请输入“确认删除”来删除「${item.title}」：`);
+      const userInput = prompt(`⚠️ 请输入“确认删除”来删除编号 ${item.number} 的图片：`);
       if (userInput !== '确认删除') { showToast('取消删除', false); return; }
-      await deleteItem(id); await loadItems(); renderGrid(); closeModal(); showToast('已删除');
+      await deleteItem(id);
+      await loadItems();
+      renderGrid();
+      closeModal();
+      showToast('已删除');
     }
 
     function renderGrid() {
@@ -524,10 +567,10 @@
         <div class="image-card" data-id="${item.id}">
           <div class="img-wrapper">
             ${item.imageData ? `<img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">` : '<div style="height:100%;display:flex;align-items:center;justify-content:center;">🖼️</div>'}
+            <span class="img-number">#${item.number}</span>
           </div>
           <div class="card-info">
-            <div class="card-title-text">${escapeHtml(item.title)}</div>
-            <div>${escapeHtml(item.prompt.substring(0, 25))}</div>
+            <div class="card-prompt">${escapeHtml(item.prompt.substring(0, 30))}</div>
           </div>
         </div>`).join('');
       document.querySelectorAll('.image-card').forEach(card => card.addEventListener('click', () => openModal(card.dataset.id)));
@@ -539,7 +582,7 @@
       if(item.imageData && (item.imageData.startsWith('data:') || item.imageData.startsWith('http'))) {
         modalImage.src = item.imageData; modalImage.style.display='block'; modalPlaceholder.style.display='none';
       } else { modalImage.style.display='none'; modalPlaceholder.style.display='flex'; }
-      modalTitleDisplay.innerHTML = `${escapeHtml(item.title)} <span class="category-badge">${categoryNames[item.category] || ''}</span>`;
+      modalNumberDisplay.innerHTML = `📌 编号 #${item.number} <span class="category-badge">${categoryNames[item.category]}</span>`;
       modalPrompt.textContent = item.prompt;
       modalOverlay.style.display='flex';
     }
@@ -563,7 +606,6 @@
     function openEdit() {
       if (!isAdmin) { showToast('只有管理员可以编辑', false); return; }
       const item = items.find(i => i.id === currentItemId); if(!item) return;
-      editTitle.value = item.title;
       editCategory.value = item.category;
       editPrompt.value = item.prompt;
       editOverlay.style.display = 'flex';
@@ -571,11 +613,12 @@
 
     async function saveEdit() {
       const item = items.find(i => i.id === currentItemId); if(!item) return;
-      item.title = editTitle.value.trim() || '未命名';
       item.category = editCategory.value;
       item.prompt = editPrompt.value.trim();
-      await updateItem(item); await loadItems(); renderGrid();
-      modalTitleDisplay.innerHTML = `${escapeHtml(item.title)} <span class="category-badge">${categoryNames[item.category] || ''}</span>`;
+      await updateItem(item);
+      await loadItems();
+      renderGrid();
+      modalNumberDisplay.innerHTML = `📌 编号 #${item.number} <span class="category-badge">${categoryNames[item.category]}</span>`;
       modalPrompt.textContent = item.prompt;
       editOverlay.style.display = 'none';
       showToast('✅ 修改已保存');
@@ -596,12 +639,33 @@
         const data = JSON.parse(text);
         if (!Array.isArray(data)) throw new Error('格式错误');
         for (const item of data) { await addItem(item); }
-        await loadItems(); renderGrid();
+        await loadItems();
+        renderGrid();
         showToast('📥 导入成功！');
       } catch (e) {
         showToast('❌ 导入失败，文件格式不正确', false);
       }
     }
+
+    // 文件选择 UI 更新
+    fileInput.addEventListener('change', () => {
+      const count = fileInput.files.length;
+      if (count > 0) {
+        uploadText.textContent = `已选择 ${count} 张图片`;
+        fileCountInfo.textContent = `共 ${count} 个文件`;
+        imageUrl.value = ''; // 清除URL
+      } else {
+        uploadText.textContent = '点击选择多张图片';
+        fileCountInfo.textContent = '';
+      }
+    });
+    imageUrl.addEventListener('input', () => {
+      if (imageUrl.value.trim()) {
+        fileInput.value = '';
+        uploadText.textContent = '点击选择多张图片';
+        fileCountInfo.textContent = '';
+      }
+    });
 
     // 事件绑定
     btnAdd.addEventListener('click', addItemHandler);
@@ -618,21 +682,27 @@
 
     const uploadArea = document.getElementById('fileUploadArea');
     uploadArea.addEventListener('click', () => fileInput.click());
-    fileInput.addEventListener('change', () => { if(fileInput.files[0]){ uploadText.textContent = fileInput.files[0].name; imageUrl.value = ''; } });
-    imageUrl.addEventListener('input', () => { if(imageUrl.value){ fileInput.value=''; uploadText.textContent='点击选择图片'; } });
     uploadArea.addEventListener('dragover', (e) => e.preventDefault());
-    uploadArea.addEventListener('drop', (e) => { e.preventDefault(); if(e.dataTransfer.files[0]){ fileInput.files = e.dataTransfer.files; uploadText.textContent = e.dataTransfer.files[0].name; imageUrl.value=''; } });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      if (e.dataTransfer.files.length > 0) {
+        fileInput.files = e.dataTransfer.files;
+        const event = new Event('change');
+        fileInput.dispatchEvent(event);
+        imageUrl.value = '';
+      }
+    });
 
     btnExport.addEventListener('click', exportData);
     btnImport.addEventListener('click', () => importFile.click());
     importFile.addEventListener('change', () => { if(importFile.files[0]) importData(importFile.files[0]); });
 
-    // 初始化
+    // 启动
     (async () => {
       try {
         await openDB();
         await loadItems();
-        updateUIMode(); // 默认访客模式
+        updateUIMode();
         renderGrid();
       } catch (e) {
         showToast('数据库初始化失败，请检查浏览器设置', false);
