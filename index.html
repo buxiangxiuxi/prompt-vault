@@ -1,512 +1,644 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-    <title>🖼️ 图片提示词库 · 可编辑可备份</title>
-    <style>
-        :root {
-            --bg: #faf8f5;
-            --card-bg: #ffffff;
-            --card-border: #e8dfd3;
-            --text: #4a3f35;
-            --text-secondary: #8b7a6b;
-            --accent: #c49a6c;
-            --accent-hover: #b88655;
-            --accent-soft: #f0e5d8;
-            --danger: #c96b6b;
-            --success: #7a9a7e;
-            --input-bg: #fefcf9;
-            --input-border: #dbd0c0;
-            --radius: 20px;
-            --radius-sm: 14px;
-            --transition: 0.2s ease;
-        }
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-            background: #faf8f5;
-            color: var(--text);
-            min-height: 100vh;
-            padding: 24px 16px;
-            display: flex;
-            justify-content: center;
-        }
-        .app-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; }
-        .header { text-align: center; }
-        .header .icon { font-size: 48px; }
-        .header h1 { font-size: 2rem; color: #4a3a2e; margin-top: 8px; }
-        .card {
-            background: #fff; border: 1px solid #e8dfd3; border-radius: 20px; padding: 24px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.03);
-        }
-        .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 18px; color: #5c4a3a; }
-        .form-grid { display: flex; flex-direction: column; gap: 14px; }
-        .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
-        .form-group { flex: 1; min-width: 200px; }
-        label { font-size: 0.85rem; font-weight: 500; color: #8b7a6b; display: block; margin-bottom: 5px; }
-        input, textarea {
-            width: 100%; padding: 12px 16px; background: #fefcf9; border: 1.5px solid #dbd0c0;
-            border-radius: 14px; font-size: 0.95rem; font-family: inherit; outline: none;
-        }
-        input:focus, textarea:focus { border-color: #c49a6c; box-shadow: 0 0 0 3px rgba(196,154,108,0.15); }
-        textarea { min-height: 70px; resize: vertical; }
-        .file-upload-area {
-            border: 2px dashed #dbd0c0; border-radius: 14px; padding: 16px; text-align: center;
-            cursor: pointer; background: #fefcf9; color: #8b7a6b; transition: 0.2s;
-        }
-        .file-upload-area:hover { border-color: #c49a6c; background: #fdf8f2; }
-        .btn {
-            padding: 11px 22px; border: none; border-radius: 14px; font-weight: 600;
-            cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;
-        }
-        .btn-primary { background: #c49a6c; color: white; width: 100%; justify-content: center; }
-        .btn-primary:hover { background: #b88655; }
-        .btn-outline { background: transparent; border: 1.5px solid #dbd0c0; color: #4a3f35; }
-        .btn-outline:hover { background: #f0e5d8; }
-        .btn-danger { background: transparent; border: 1.5px solid rgba(201,107,107,0.3); color: #c96b6b; }
-        .search-wrapper { position: relative; margin-bottom: 16px; }
-        .search-wrapper input { padding-right: 44px; }
-        .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-        .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-        .items-count { background: #f0e5d8; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; }
-        .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-        .image-card {
-            background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #e8dfd3;
-            cursor: pointer; transition: 0.2s;
-        }
-        .image-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-        .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; }
-        .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }  /* 改为contain完整显示 */
-        .card-info { padding: 10px; font-size: 0.8rem; color: #7a6a5c; }
-        .card-title-text { font-weight: 600; color: #4a3a2e; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-        .no-items { grid-column: 1/-1; text-align: center; padding: 40px; color: #8b7a6b; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <title>Sun和休息の词会 · 第一期</title>
+  <style>
+    :root {
+      --bg: #faf8f5;
+      --card-bg: #ffffff;
+      --card-border: #e8dfd3;
+      --text: #4a3f35;
+      --text-secondary: #8b7a6b;
+      --accent: #c49a6c;
+      --accent-hover: #b88655;
+      --accent-soft: #f0e5d8;
+      --danger: #c96b6b;
+      --success: #7a9a7e;
+      --input-bg: #fefcf9;
+      --input-border: #dbd0c0;
+      --radius: 20px;
+      --radius-sm: 14px;
+      --transition: 0.2s ease;
+    }
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #faf8f5;
+      color: var(--text);
+      min-height: 100vh;
+      padding: 24px 16px;
+      display: flex;
+      justify-content: center;
+    }
+    .app-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; }
+    .header { text-align: center; position: relative; }
+    .header .icon { font-size: 48px; }
+    .header h1 { font-size: 2rem; color: #4a3a2e; margin-top: 8px; }
+    .admin-bar { text-align: right; margin-bottom: 8px; }
+    .card {
+      background: #fff; border: 1px solid #e8dfd3; border-radius: 20px; padding: 24px;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+    }
+    .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 18px; color: #5c4a3a; }
+    .form-grid { display: flex; flex-direction: column; gap: 14px; }
+    .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
+    .form-group { flex: 1; min-width: 200px; }
+    label { font-size: 0.85rem; font-weight: 500; color: #8b7a6b; display: block; margin-bottom: 5px; }
+    input, textarea, select {
+      width: 100%; padding: 12px 16px; background: #fefcf9; border: 1.5px solid #dbd0c0;
+      border-radius: 14px; font-size: 0.95rem; font-family: inherit; outline: none;
+    }
+    input:focus, textarea:focus, select:focus { border-color: #c49a6c; box-shadow: 0 0 0 3px rgba(196,154,108,0.15); }
+    textarea { min-height: 70px; resize: vertical; }
+    .file-upload-area {
+      border: 2px dashed #dbd0c0; border-radius: 14px; padding: 16px; text-align: center;
+      cursor: pointer; background: #fefcf9; color: #8b7a6b; transition: 0.2s;
+    }
+    .file-upload-area:hover { border-color: #c49a6c; background: #fdf8f2; }
+    .btn {
+      padding: 11px 22px; border: none; border-radius: 14px; font-weight: 600;
+      cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;
+      justify-content: center;
+    }
+    .btn-primary { background: #c49a6c; color: white; width: 100%; }
+    .btn-primary:hover { background: #b88655; }
+    .btn-outline { background: transparent; border: 1.5px solid #dbd0c0; color: #4a3f35; }
+    .btn-outline:hover { background: #f0e5d8; }
+    .btn-danger { background: transparent; border: 1.5px solid rgba(201,107,107,0.3); color: #c96b6b; }
+    .search-wrapper { position: relative; margin-bottom: 16px; }
+    .search-wrapper input { padding-right: 44px; }
+    .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
+    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .items-count { background: #f0e5d8; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
+    .tab-btn {
+      padding: 10px 20px; border-radius: 14px; border: 1.5px solid #dbd0c0; background: transparent;
+      color: #4a3f35; font-weight: 500; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+    }
+    .tab-btn.active { background: #c49a6c; color: white; border-color: #c49a6c; }
+    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
+    .image-card {
+      background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #e8dfd3;
+      cursor: pointer; transition: 0.2s;
+    }
+    .image-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
+    .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; }
+    .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
+    .card-info { padding: 10px; font-size: 0.8rem; color: #7a6a5c; }
+    .card-title-text { font-weight: 600; color: #4a3a2e; margin-bottom: 2px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+    .no-items { grid-column: 1/-1; text-align: center; padding: 40px; color: #8b7a6b; }
 
-        .modal-overlay {
-            position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
-            display: flex; align-items: center; justify-content: center; z-index: 100;
-        }
-        .modal {
-            background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 500px;
-            max-height: 90vh; overflow-y: auto;
-        }
-        .modal img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 16px; }
-        .prompt-box {
-            background: #fdf9f4; padding: 14px; border-radius: 12px; margin: 8px 0 16px;
-            white-space: pre-wrap; word-break: break-word;
-        }
-        .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
-        .toast {
-            position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-            background: white; padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-            z-index: 200; animation: toast 2.3s forwards;
-        }
-        @keyframes toast { 0%{opacity:0;transform:translateX(-50%) translateY(20px);} 10%{opacity:1;transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0;} }
-        .backup-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    </style>
+    .modal-overlay {
+      position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center; z-index: 100;
+    }
+    .modal {
+      background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 500px;
+      max-height: 90vh; overflow-y: auto;
+    }
+    .modal img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 16px; }
+    .prompt-box {
+      background: #fdf9f4; padding: 14px; border-radius: 12px; margin: 8px 0 16px;
+      white-space: pre-wrap; word-break: break-word;
+    }
+    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .toast {
+      position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
+      background: white; padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
+      z-index: 200; animation: toast 2.3s forwards;
+    }
+    @keyframes toast { 0%{opacity:0;transform:translateX(-50%) translateY(20px);} 10%{opacity:1;transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0;} }
+    .backup-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    .admin-only { display: none; }
+    .admin-mode .admin-only { display: flex; }
+    .login-modal {
+      background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 360px; text-align: center;
+    }
+    .category-badge {
+      display: inline-block; background: #f0e5d8; padding: 2px 8px; border-radius: 10px;
+      font-size: 0.7rem; margin-left: 6px; vertical-align: middle;
+    }
+  </style>
 </head>
 <body>
-<div class="app-container">
-    <div class="header">
-        <span class="icon">🖼️</span>
-        <h1>灵感图片·提示词库</h1>
-        <p style="color:#8b7a6b;">可编辑 · 可备份 · 不怕丢失</p>
+<div id="appScreen" class="app-container">
+  <div class="header">
+    <div class="admin-bar">
+      <button class="btn btn-outline btn-sm" id="adminLoginBtn">🔒 管理员登录</button>
+      <button class="btn btn-outline btn-sm admin-only" id="adminLogoutBtn" style="display:none;">🔓 退出管理</button>
     </div>
+    <span class="icon">🌸</span>
+    <h1>Sun和休息の词会 · 第一期</h1>
+    <p style="color:#8b7a6b;" id="modeHint">访客模式 · 仅浏览</p>
+  </div>
 
-    <div class="card">
-        <div class="card-title">📥 存入新图片</div>
-        <div class="form-grid">
-            <div class="form-group">
-                <label>🏷️ 图片标题</label>
-                <input type="text" id="titleInput" placeholder="给这张图片起个名字...">
-            </div>
-            <div class="form-row">
-                <div class="form-group" style="flex:2;">
-                    <label>🔗 图片URL (推荐)</label>
-                    <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
-                </div>
-                <div class="form-group" style="flex:1;">
-                    <label>📁 或上传文件</label>
-                    <div class="file-upload-area" id="fileUploadArea">
-                        <span id="uploadText">点击选择图片</span>
-                        <input type="file" id="fileInput" accept="image/*" style="display:none;">
-                    </div>
-                </div>
-            </div>
-            <div class="form-group">
-                <label>💬 提示词</label>
-                <textarea id="promptInput" placeholder="输入这张图片的提示词..."></textarea>
-            </div>
-            <button class="btn btn-primary" id="btnAdd">✨ 存入图片与提示词</button>
+  <!-- 添加图片卡片 (仅管理员可见) -->
+  <div class="card admin-only" id="addCard">
+    <div class="card-title">📥 存入新图片</div>
+    <div class="form-grid">
+      <div class="form-group">
+        <label>🏷️ 图片标题</label>
+        <input type="text" id="titleInput" placeholder="给这张图片起个名字...">
+      </div>
+      <div class="form-row">
+        <div class="form-group" style="flex:2;">
+          <label>🔗 图片URL (推荐)</label>
+          <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
         </div>
+        <div class="form-group" style="flex:1;">
+          <label>📁 或上传文件</label>
+          <div class="file-upload-area" id="fileUploadArea">
+            <span id="uploadText">点击选择图片</span>
+            <input type="file" id="fileInput" accept="image/*" style="display:none;">
+          </div>
+        </div>
+      </div>
+      <div class="form-group">
+        <label>📂 选择词库</label>
+        <select id="categorySelect">
+          <option value="rest">休息的词库</option>
+          <option value="sun">Sun的词库</option>
+          <option value="gift">赠词词库</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label>💬 提示词</label>
+        <textarea id="promptInput" placeholder="输入这张图片的提示词..."></textarea>
+      </div>
+      <button class="btn btn-primary" id="btnAdd">✨ 存入图片与提示词</button>
     </div>
+  </div>
 
-    <div class="card">
-        <div class="card-title">🖼️ 我的图片库</div>
-        <!-- 备份导入导出 -->
-        <div class="backup-row">
-            <button class="btn btn-outline btn-sm" id="btnExport">📤 导出备份</button>
-            <button class="btn btn-outline btn-sm" id="btnImport">📥 导入备份</button>
-            <input type="file" id="importFile" accept=".json" style="display:none;">
-        </div>
-        <div class="search-wrapper">
-            <input type="text" id="searchInput" placeholder="搜索标题或提示词...">
-            <span class="search-icon">🔍</span>
-        </div>
-        <div class="items-header">
-            <span class="items-count" id="itemsCount">共 0 张图片</span>
-        </div>
-        <div class="image-grid" id="imageGrid"></div>
+  <!-- 图片库卡片 -->
+  <div class="card">
+    <div class="card-title">🌸 词库浏览</div>
+    <!-- 选项卡 -->
+    <div class="tabs" id="categoryTabs">
+      <button class="tab-btn active" data-cat="rest">🛋️ 休息的词库</button>
+      <button class="tab-btn" data-cat="sun">☀️ Sun的词库</button>
+      <button class="tab-btn" data-cat="gift">🎁 赠词词库</button>
     </div>
+    <div class="backup-row">
+      <button class="btn btn-outline btn-sm" id="btnImport">📥 导入备份</button>
+      <button class="btn btn-outline btn-sm admin-only" id="btnExport">📤 导出备份</button>
+      <input type="file" id="importFile" accept=".json" style="display:none;">
+    </div>
+    <div class="search-wrapper">
+      <input type="text" id="searchInput" placeholder="搜索当前词库的标题或提示词...">
+      <span class="search-icon">🔍</span>
+    </div>
+    <div class="items-header">
+      <span class="items-count" id="itemsCount">共 0 张图片</span>
+    </div>
+    <div class="image-grid" id="imageGrid"></div>
+  </div>
 </div>
 
-<!-- 详情与编辑弹窗 -->
+<!-- 图片详情弹窗 -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
-    <div class="modal">
-        <img id="modalImage" src="" style="display:none;">
-        <div id="modalPlaceholder" style="width:100%;height:200px;background:#f0e9df;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px;">🖼️</div>
-        <h3 id="modalTitleDisplay" style="margin-bottom:4px;"></h3>
-        <div class="prompt-box" id="modalPrompt"></div>
-        <div class="btn-row">
-            <button class="btn btn-primary" id="btnCopyPrompt">📋 复制提示词</button>
-            <button class="btn btn-outline" id="btnEdit">✏️ 编辑</button>
-            <button class="btn btn-outline" id="btnModalClose">关闭</button>
-            <button class="btn btn-danger btn-sm" id="btnDeleteItem">🗑️ 删除</button>
-        </div>
-        <span id="copyFeedback" style="color:#7a9a7e;font-size:0.8rem;"></span>
+  <div class="modal">
+    <img id="modalImage" src="" style="display:none;">
+    <div id="modalPlaceholder" style="width:100%;height:200px;background:#f0e9df;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px;">🖼️</div>
+    <h3 id="modalTitleDisplay" style="margin-bottom:4px;"></h3>
+    <div class="prompt-box" id="modalPrompt"></div>
+    <div class="btn-row">
+      <button class="btn btn-primary" id="btnCopyPrompt">📋 复制提示词</button>
+      <button class="btn btn-outline admin-only" id="btnEdit">✏️ 编辑</button>
+      <button class="btn btn-outline" id="btnModalClose">关闭</button>
+      <button class="btn btn-danger btn-sm admin-only" id="btnDeleteItem">🗑️ 删除</button>
     </div>
+    <span id="copyFeedback" style="color:#7a9a7e;font-size:0.8rem;"></span>
+  </div>
 </div>
 
 <!-- 编辑弹窗 -->
 <div class="modal-overlay" id="editOverlay" style="display:none;">
-    <div class="modal">
-        <h3>✏️ 编辑信息</h3>
-        <div class="form-group" style="margin-top:12px;">
-            <label>🏷️ 标题</label>
-            <input type="text" id="editTitle">
-        </div>
-        <div class="form-group">
-            <label>💬 提示词</label>
-            <textarea id="editPrompt" rows="4"></textarea>
-        </div>
-        <div class="btn-row" style="margin-top:16px;">
-            <button class="btn btn-primary" id="btnSaveEdit">💾 保存修改</button>
-            <button class="btn btn-outline" id="btnCancelEdit">取消</button>
-        </div>
+  <div class="modal">
+    <h3>✏️ 编辑信息</h3>
+    <div class="form-group" style="margin-top:12px;">
+      <label>🏷️ 标题</label>
+      <input type="text" id="editTitle">
     </div>
+    <div class="form-group">
+      <label>📂 词库</label>
+      <select id="editCategory">
+        <option value="rest">休息的词库</option>
+        <option value="sun">Sun的词库</option>
+        <option value="gift">赠词词库</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>💬 提示词</label>
+      <textarea id="editPrompt" rows="4"></textarea>
+    </div>
+    <div class="btn-row" style="margin-top:16px;">
+      <button class="btn btn-primary" id="btnSaveEdit">💾 保存修改</button>
+      <button class="btn btn-outline" id="btnCancelEdit">取消</button>
+    </div>
+  </div>
+</div>
+
+<!-- 管理员登录弹窗 -->
+<div class="modal-overlay" id="loginOverlay" style="display:none;">
+  <div class="login-modal">
+    <h3>🔐 管理员登录</h3>
+    <input type="password" id="adminPassword" placeholder="输入管理密码" style="width:100%; margin:16px 0; text-align:center;">
+    <button class="btn btn-primary" id="confirmLogin">确认</button>
+    <p id="loginError" style="color:#c96b6b; font-size:0.85rem; margin-top:8px; display:none;">密码错误</p>
+  </div>
 </div>
 
 <script>
-    (() => {
-        // ---------- IndexedDB 封装 ----------
-        const DB_NAME = 'PromptVault2';
-        let db = null;
+  (() => {
+    const ADMIN_PASSWORD = '5201314';
+    let isAdmin = false;
+    let currentCategory = 'rest'; // 当前选中的分类
 
-        function openDB() {
-            return new Promise((resolve, reject) => {
-                const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => {
-                    const db = e.target.result;
-                    if (!db.objectStoreNames.contains('images')) {
-                        db.createObjectStore('images', { keyPath: 'id' });
-                    }
-                };
-                request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-                request.onerror = (e) => reject(e.target.error);
-            });
-        }
+    // ---------- IndexedDB ----------
+    const DB_NAME = 'SunRestWordVault';
+    let db = null;
+    function openDB() {
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(DB_NAME, 1);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('images')) {
+            db.createObjectStore('images', { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+        request.onerror = (e) => reject(e.target.error);
+      });
+    }
+    async function getDB() { if (db) return db; return await openDB(); }
+    async function addItem(item) {
+      const database = await getDB();
+      return new Promise((resolve, reject) => {
+        const tx = database.transaction('images', 'readwrite');
+        const store = tx.objectStore('images');
+        const req = store.add(item);
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function getAllItems() {
+      const database = await getDB();
+      return new Promise((resolve, reject) => {
+        const tx = database.transaction('images', 'readonly');
+        const store = tx.objectStore('images');
+        const req = store.getAll();
+        req.onsuccess = () => resolve(req.result || []);
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function updateItem(item) {
+      const database = await getDB();
+      return new Promise((resolve, reject) => {
+        const tx = database.transaction('images', 'readwrite');
+        const store = tx.objectStore('images');
+        const req = store.put(item);
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+      });
+    }
+    async function deleteItem(id) {
+      const database = await getDB();
+      return new Promise((resolve, reject) => {
+        const tx = database.transaction('images', 'readwrite');
+        const store = tx.objectStore('images');
+        const req = store.delete(id);
+        req.onsuccess = () => resolve();
+        req.onerror = () => reject(req.error);
+      });
+    }
 
-        async function getDB() {
-            if (db) return db;
-            return await openDB();
-        }
+    function compressImage(file, maxWidth = 800, quality = 0.7) {
+      return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement('canvas');
+            let width = img.width, height = img.height;
+            if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
+            canvas.width = width; canvas.height = height;
+            const ctx = canvas.getContext('2d');
+            ctx.drawImage(img, 0, 0, width, height);
+            resolve(canvas.toDataURL('image/jpeg', quality));
+          };
+          img.onerror = reject;
+          img.src = e.target.result;
+        };
+        reader.onerror = reject;
+        reader.readAsDataURL(file);
+      });
+    }
 
-        async function addItem(item) {
-            const database = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = database.transaction('images', 'readwrite');
-                const store = tx.objectStore('images');
-                const req = store.add(item);
-                req.onsuccess = () => resolve();
-                req.onerror = () => reject(req.error);
-            });
-        }
+    function showToast(msg, isSuccess = true) {
+      const toast = document.createElement('div');
+      toast.className = 'toast';
+      toast.textContent = msg;
+      toast.style.background = isSuccess ? '#f6ffed' : '#fff2f0';
+      toast.style.borderColor = isSuccess ? '#b7eb8f' : '#ffccc7';
+      document.body.appendChild(toast);
+      setTimeout(() => toast.remove(), 2300);
+    }
 
-        async function getAllItems() {
-            const database = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = database.transaction('images', 'readonly');
-                const store = tx.objectStore('images');
-                const req = store.getAll();
-                req.onsuccess = () => resolve(req.result || []);
-                req.onerror = () => reject(req.error);
-            });
-        }
+    function escapeHtml(str) {
+      const div = document.createElement('div');
+      div.textContent = str;
+      return div.innerHTML;
+    }
 
-        async function updateItem(item) {
-            const database = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = database.transaction('images', 'readwrite');
-                const store = tx.objectStore('images');
-                const req = store.put(item);
-                req.onsuccess = () => resolve();
-                req.onerror = () => reject(req.error);
-            });
-        }
+    // ---------- UI 状态 ----------
+    let items = [];
+    let currentItemId = null;
 
-        async function deleteItem(id) {
-            const database = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = database.transaction('images', 'readwrite');
-                const store = tx.objectStore('images');
-                const req = store.delete(id);
-                req.onsuccess = () => resolve();
-                req.onerror = () => reject(req.error);
-            });
-        }
+    // DOM 元素
+    const appScreen = document.getElementById('appScreen');
+    const adminLoginBtn = document.getElementById('adminLoginBtn');
+    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
+    const modeHint = document.getElementById('modeHint');
+    const addCard = document.getElementById('addCard');
+    const titleInput = document.getElementById('titleInput');
+    const imageUrl = document.getElementById('imageUrl');
+    const fileInput = document.getElementById('fileInput');
+    const uploadText = document.getElementById('uploadText');
+    const promptInput = document.getElementById('promptInput');
+    const categorySelect = document.getElementById('categorySelect');
+    const btnAdd = document.getElementById('btnAdd');
+    const searchInput = document.getElementById('searchInput');
+    const imageGrid = document.getElementById('imageGrid');
+    const itemsCount = document.getElementById('itemsCount');
+    const categoryTabs = document.getElementById('categoryTabs');
+    const modalOverlay = document.getElementById('modalOverlay');
+    const modalImage = document.getElementById('modalImage');
+    const modalPlaceholder = document.getElementById('modalPlaceholder');
+    const modalTitleDisplay = document.getElementById('modalTitleDisplay');
+    const modalPrompt = document.getElementById('modalPrompt');
+    const btnCopyPrompt = document.getElementById('btnCopyPrompt');
+    const btnEdit = document.getElementById('btnEdit');
+    const btnModalClose = document.getElementById('btnModalClose');
+    const btnDeleteItem = document.getElementById('btnDeleteItem');
+    const copyFeedback = document.getElementById('copyFeedback');
+    const editOverlay = document.getElementById('editOverlay');
+    const editTitle = document.getElementById('editTitle');
+    const editCategory = document.getElementById('editCategory');
+    const editPrompt = document.getElementById('editPrompt');
+    const btnSaveEdit = document.getElementById('btnSaveEdit');
+    const btnCancelEdit = document.getElementById('btnCancelEdit');
+    const btnExport = document.getElementById('btnExport');
+    const btnImport = document.getElementById('btnImport');
+    const importFile = document.getElementById('importFile');
+    const loginOverlay = document.getElementById('loginOverlay');
+    const adminPassword = document.getElementById('adminPassword');
+    const confirmLogin = document.getElementById('confirmLogin');
+    const loginError = document.getElementById('loginError');
 
-        async function clearAll() {
-            const database = await getDB();
-            return new Promise((resolve, reject) => {
-                const tx = database.transaction('images', 'readwrite');
-                const store = tx.objectStore('images');
-                const req = store.clear();
-                req.onsuccess = () => resolve();
-                req.onerror = () => reject(req.error);
-            });
-        }
+    // 分类映射
+    const categoryNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
 
-        // 图片压缩
-        function compressImage(file, maxWidth = 800, quality = 0.7) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    const img = new Image();
-                    img.onload = () => {
-                        const canvas = document.createElement('canvas');
-                        let width = img.width, height = img.height;
-                        if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
-                        canvas.width = width; canvas.height = height;
-                        const ctx = canvas.getContext('2d');
-                        ctx.drawImage(img, 0, 0, width, height);
-                        resolve(canvas.toDataURL('image/jpeg', quality));
-                    };
-                    img.onerror = reject;
-                    img.src = e.target.result;
-                };
-                reader.onerror = reject;
-                reader.readAsDataURL(file);
-            });
-        }
+    function updateUIMode() {
+      if (isAdmin) {
+        appScreen.classList.add('admin-mode');
+        modeHint.textContent = '管理员模式 · 可编辑';
+        adminLoginBtn.style.display = 'none';
+        adminLogoutBtn.style.display = 'inline-flex';
+      } else {
+        appScreen.classList.remove('admin-mode');
+        modeHint.textContent = '访客模式 · 仅浏览';
+        adminLoginBtn.style.display = 'inline-flex';
+        adminLogoutBtn.style.display = 'none';
+        editOverlay.style.display = 'none';
+      }
+      renderGrid();
+    }
 
-        function showToast(msg, isSuccess = true) {
-            const toast = document.createElement('div');
-            toast.className = 'toast';
-            toast.textContent = msg;
-            toast.style.background = isSuccess ? '#f6ffed' : '#fff2f0';
-            toast.style.borderColor = isSuccess ? '#b7eb8f' : '#ffccc7';
-            document.body.appendChild(toast);
-            setTimeout(() => toast.remove(), 2300);
-        }
+    // 选项卡切换
+    categoryTabs.addEventListener('click', (e) => {
+      const btn = e.target.closest('.tab-btn');
+      if (!btn) return;
+      currentCategory = btn.dataset.cat;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      searchInput.value = '';
+      renderGrid();
+    });
 
-        function escapeHtml(str) {
-            const div = document.createElement('div');
-            div.textContent = str;
-            return div.innerHTML;
-        }
+    // 管理员登录
+    adminLoginBtn.addEventListener('click', () => {
+      loginOverlay.style.display = 'flex';
+      adminPassword.value = '';
+      loginError.style.display = 'none';
+      adminPassword.focus();
+    });
+    confirmLogin.addEventListener('click', () => {
+      if (adminPassword.value === ADMIN_PASSWORD) {
+        isAdmin = true;
+        loginOverlay.style.display = 'none';
+        updateUIMode();
+        showToast('🔓 已切换为管理员模式');
+      } else {
+        loginError.style.display = 'block';
+        adminPassword.value = '';
+      }
+    });
+    adminPassword.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter') confirmLogin.click();
+    });
+    adminLogoutBtn.addEventListener('click', () => {
+      isAdmin = false;
+      updateUIMode();
+      showToast('🔒 已退出管理，恢复访客模式');
+    });
+    loginOverlay.addEventListener('click', (e) => {
+      if (e.target === loginOverlay) loginOverlay.style.display = 'none';
+    });
 
-        // ---------- 全局状态 ----------
-        let items = [];
-        const titleInput = document.getElementById('titleInput');
-        const imageUrl = document.getElementById('imageUrl');
-        const fileInput = document.getElementById('fileInput');
-        const uploadText = document.getElementById('uploadText');
-        const promptInput = document.getElementById('promptInput');
-        const btnAdd = document.getElementById('btnAdd');
-        const searchInput = document.getElementById('searchInput');
-        const imageGrid = document.getElementById('imageGrid');
-        const itemsCount = document.getElementById('itemsCount');
-        const modalOverlay = document.getElementById('modalOverlay');
-        const modalImage = document.getElementById('modalImage');
-        const modalPlaceholder = document.getElementById('modalPlaceholder');
-        const modalTitleDisplay = document.getElementById('modalTitleDisplay');
-        const modalPrompt = document.getElementById('modalPrompt');
-        const btnCopyPrompt = document.getElementById('btnCopyPrompt');
-        const btnEdit = document.getElementById('btnEdit');
-        const btnModalClose = document.getElementById('btnModalClose');
-        const btnDeleteItem = document.getElementById('btnDeleteItem');
-        const copyFeedback = document.getElementById('copyFeedback');
-        const editOverlay = document.getElementById('editOverlay');
-        const editTitle = document.getElementById('editTitle');
-        const editPrompt = document.getElementById('editPrompt');
-        const btnSaveEdit = document.getElementById('btnSaveEdit');
-        const btnCancelEdit = document.getElementById('btnCancelEdit');
-        const btnExport = document.getElementById('btnExport');
-        const btnImport = document.getElementById('btnImport');
-        const importFile = document.getElementById('importFile');
-        let currentItemId = null;
+    // ---------- 数据加载 ----------
+    async function loadItems() {
+      try { items = await getAllItems(); items.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; }
+    }
 
-        async function loadItems() {
-            try { items = await getAllItems(); items.sort((a,b)=> new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; showToast('数据读取失败', false); }
-        }
+    // 获取当前分类的过滤后图片
+    function getFilteredItems() {
+      const term = searchInput.value.trim().toLowerCase();
+      return items.filter(item => {
+        if (item.category !== currentCategory) return false;
+        if (!term) return true;
+        return item.title.toLowerCase().includes(term) || item.prompt.toLowerCase().includes(term);
+      });
+    }
 
-        async function addItemHandler() {
-            const title = titleInput.value.trim() || '未命名';
-            const prompt = promptInput.value.trim();
-            if (!prompt) { showToast('请输入提示词', false); return; }
-            let imageData = null;
-            const urlValue = imageUrl.value.trim();
-            const file = fileInput.files[0];
-            try {
-                if (urlValue) {
-                    if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) { showToast('URL格式不正确', false); return; }
-                    imageData = urlValue;
-                } else if (file) {
-                    showToast('正在压缩图片...'); imageData = await compressImage(file);
-                } else { showToast('请提供图片URL或上传文件', false); return; }
-                const newItem = { id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6), title, imageData, prompt, createdAt: new Date().toISOString() };
-                await addItem(newItem); await loadItems(); renderGrid(searchInput.value);
-                titleInput.value = ''; imageUrl.value = ''; fileInput.value = ''; uploadText.textContent = '点击选择图片'; promptInput.value = '';
-                showToast('✅ 保存成功！');
-            } catch (err) {
-                let msg = '保存失败'; if (err.name === 'QuotaExceededError') msg = '存储空间已满'; else if (err.message) msg = err.message;
-                showToast('❌ ' + msg, false);
-            }
-        }
+    async function addItemHandler() {
+      if (!isAdmin) { showToast('只有管理员可以添加图片', false); return; }
+      const title = titleInput.value.trim() || '未命名';
+      const prompt = promptInput.value.trim();
+      if (!prompt) { showToast('请输入提示词', false); return; }
+      let imageData = null;
+      const urlValue = imageUrl.value.trim();
+      const file = fileInput.files[0];
+      try {
+        if (urlValue) {
+          if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) { showToast('URL格式不正确', false); return; }
+          imageData = urlValue;
+        } else if (file) {
+          showToast('正在压缩图片...'); imageData = await compressImage(file);
+        } else { showToast('请提供图片URL或上传文件', false); return; }
+        const newItem = {
+          id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
+          title,
+          imageData,
+          prompt,
+          category: categorySelect.value,
+          createdAt: new Date().toISOString()
+        };
+        await addItem(newItem); await loadItems(); renderGrid();
+        titleInput.value = ''; imageUrl.value = ''; fileInput.value = ''; uploadText.textContent = '点击选择图片'; promptInput.value = '';
+        showToast('✅ 保存成功！');
+      } catch (err) {
+        let msg = '保存失败'; if (err.name === 'QuotaExceededError') msg = '存储空间已满'; else if (err.message) msg = err.message;
+        showToast('❌ ' + msg, false);
+      }
+    }
 
-        // 删除（需输入文字确认）
-        async function deleteItemHandler(id) {
-            const item = items.find(i => i.id === id);
-            if (!item) return;
-            const userInput = prompt(`⚠️ 请输入“确认删除”来删除「${item.title}」：`);
-            if (userInput !== '确认删除') { showToast('取消删除', false); return; }
-            await deleteItem(id); await loadItems(); renderGrid(searchInput.value); closeModal(); showToast('已删除');
-        }
+    async function deleteItemHandler(id) {
+      if (!isAdmin) { showToast('只有管理员可以删除', false); return; }
+      const item = items.find(i => i.id === id);
+      if (!item) return;
+      const userInput = prompt(`⚠️ 请输入“确认删除”来删除「${item.title}」：`);
+      if (userInput !== '确认删除') { showToast('取消删除', false); return; }
+      await deleteItem(id); await loadItems(); renderGrid(); closeModal(); showToast('已删除');
+    }
 
-        function renderGrid(filter = '') {
-            const term = filter.trim().toLowerCase();
-            const filtered = term ? items.filter(i => i.title.toLowerCase().includes(term) || i.prompt.toLowerCase().includes(term)) : items;
-            itemsCount.textContent = `共 ${filtered.length} 张图片`;
-            if (filtered.length === 0) { imageGrid.innerHTML = `<div class="no-items">🖼️<br>暂无图片</div>`; return; }
-            imageGrid.innerHTML = filtered.map(item => `
-                <div class="image-card" data-id="${item.id}">
-                    <div class="img-wrapper">
-                        ${item.imageData ? `<img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">` : '<div style="height:100%;display:flex;align-items:center;justify-content:center;">🖼️</div>'}
-                    </div>
-                    <div class="card-info">
-                        <div class="card-title-text">${escapeHtml(item.title)}</div>
-                        <div>${escapeHtml(item.prompt.substring(0, 25))}</div>
-                    </div>
-                </div>`).join('');
-            document.querySelectorAll('.image-card').forEach(card => card.addEventListener('click', () => openModal(card.dataset.id)));
-        }
+    function renderGrid() {
+      const filtered = getFilteredItems();
+      itemsCount.textContent = `${categoryNames[currentCategory]} · 共 ${filtered.length} 张`;
+      if (filtered.length === 0) {
+        imageGrid.innerHTML = `<div class="no-items">🌸<br>暂无图片</div>`;
+        return;
+      }
+      imageGrid.innerHTML = filtered.map(item => `
+        <div class="image-card" data-id="${item.id}">
+          <div class="img-wrapper">
+            ${item.imageData ? `<img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">` : '<div style="height:100%;display:flex;align-items:center;justify-content:center;">🖼️</div>'}
+          </div>
+          <div class="card-info">
+            <div class="card-title-text">${escapeHtml(item.title)}</div>
+            <div>${escapeHtml(item.prompt.substring(0, 25))}</div>
+          </div>
+        </div>`).join('');
+      document.querySelectorAll('.image-card').forEach(card => card.addEventListener('click', () => openModal(card.dataset.id)));
+    }
 
-        function openModal(id) {
-            const item = items.find(i => i.id === id); if(!item) return;
-            currentItemId = id; copyFeedback.textContent = '';
-            if(item.imageData && (item.imageData.startsWith('data:') || item.imageData.startsWith('http'))) {
-                modalImage.src = item.imageData; modalImage.style.display='block'; modalPlaceholder.style.display='none';
-            } else { modalImage.style.display='none'; modalPlaceholder.style.display='flex'; }
-            modalTitleDisplay.textContent = item.title;
-            modalPrompt.textContent = item.prompt;
-            modalOverlay.style.display='flex';
-        }
+    function openModal(id) {
+      const item = items.find(i => i.id === id); if(!item) return;
+      currentItemId = id; copyFeedback.textContent = '';
+      if(item.imageData && (item.imageData.startsWith('data:') || item.imageData.startsWith('http'))) {
+        modalImage.src = item.imageData; modalImage.style.display='block'; modalPlaceholder.style.display='none';
+      } else { modalImage.style.display='none'; modalPlaceholder.style.display='flex'; }
+      modalTitleDisplay.innerHTML = `${escapeHtml(item.title)} <span class="category-badge">${categoryNames[item.category] || ''}</span>`;
+      modalPrompt.textContent = item.prompt;
+      modalOverlay.style.display='flex';
+    }
 
-        function closeModal() { modalOverlay.style.display='none'; currentItemId = null; }
+    function closeModal() { modalOverlay.style.display='none'; currentItemId = null; }
 
-        // 复制（兼容file://）
-        async function copyPrompt() {
-            const text = modalPrompt.textContent;
-            if (!text) return;
-            if (navigator.clipboard && window.isSecureContext) {
-                try { await navigator.clipboard.writeText(text); copyFeedback.textContent = '✅ 已复制'; setTimeout(()=>copyFeedback.textContent='',2000); return; } catch(e){}
-            }
-            const textarea = document.createElement('textarea');
-            textarea.value = text; textarea.style.position='fixed'; textarea.style.opacity='0';
-            document.body.appendChild(textarea); textarea.select();
-            try { const ok = document.execCommand('copy'); copyFeedback.textContent = ok ? '✅ 已复制' : '❌ 失败'; } catch(e) { copyFeedback.textContent = '❌ 失败'; }
-            document.body.removeChild(textarea);
-            setTimeout(()=>copyFeedback.textContent='',2000);
-        }
+    async function copyPrompt() {
+      const text = modalPrompt.textContent;
+      if (!text) return;
+      if (navigator.clipboard && window.isSecureContext) {
+        try { await navigator.clipboard.writeText(text); copyFeedback.textContent = '✅ 已复制'; setTimeout(()=>copyFeedback.textContent='',2000); return; } catch(e){}
+      }
+      const textarea = document.createElement('textarea');
+      textarea.value = text; textarea.style.position='fixed'; textarea.style.opacity='0';
+      document.body.appendChild(textarea); textarea.select();
+      try { const ok = document.execCommand('copy'); copyFeedback.textContent = ok ? '✅ 已复制' : '❌ 失败'; } catch(e) { copyFeedback.textContent = '❌ 失败'; }
+      document.body.removeChild(textarea);
+      setTimeout(()=>copyFeedback.textContent='',2000);
+    }
 
-        // 编辑功能
-        function openEdit() {
-            const item = items.find(i => i.id === currentItemId); if(!item) return;
-            editTitle.value = item.title;
-            editPrompt.value = item.prompt;
-            editOverlay.style.display = 'flex';
-        }
+    function openEdit() {
+      if (!isAdmin) { showToast('只有管理员可以编辑', false); return; }
+      const item = items.find(i => i.id === currentItemId); if(!item) return;
+      editTitle.value = item.title;
+      editCategory.value = item.category;
+      editPrompt.value = item.prompt;
+      editOverlay.style.display = 'flex';
+    }
 
-        async function saveEdit() {
-            const item = items.find(i => i.id === currentItemId); if(!item) return;
-            item.title = editTitle.value.trim() || '未命名';
-            item.prompt = editPrompt.value.trim();
-            await updateItem(item); await loadItems(); renderGrid(searchInput.value);
-            // 更新弹窗显示
-            modalTitleDisplay.textContent = item.title;
-            modalPrompt.textContent = item.prompt;
-            editOverlay.style.display = 'none';
-            showToast('✅ 修改已保存');
-        }
+    async function saveEdit() {
+      const item = items.find(i => i.id === currentItemId); if(!item) return;
+      item.title = editTitle.value.trim() || '未命名';
+      item.category = editCategory.value;
+      item.prompt = editPrompt.value.trim();
+      await updateItem(item); await loadItems(); renderGrid();
+      modalTitleDisplay.innerHTML = `${escapeHtml(item.title)} <span class="category-badge">${categoryNames[item.category] || ''}</span>`;
+      modalPrompt.textContent = item.prompt;
+      editOverlay.style.display = 'none';
+      showToast('✅ 修改已保存');
+    }
 
-        // 导出备份
-        async function exportData() {
-            const allItems = await getAllItems();
-            const blob = new Blob([JSON.stringify(allItems, null, 2)], {type: 'application/json'});
-            const url = URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.href = url; a.download = `提示词库备份_${new Date().toISOString().slice(0,10)}.json`;
-            a.click(); URL.revokeObjectURL(url); showToast('📤 备份文件已下载');
-        }
+    async function exportData() {
+      const allItems = await getAllItems();
+      const blob = new Blob([JSON.stringify(allItems, null, 2)], {type: 'application/json'});
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url; a.download = `词会备份_${new Date().toISOString().slice(0,10)}.json`;
+      a.click(); URL.revokeObjectURL(url); showToast('📤 备份文件已下载');
+    }
 
-        // 导入备份
-        async function importData(file) {
-            try {
-                const text = await file.text();
-                const data = JSON.parse(text);
-                if (!Array.isArray(data)) throw new Error('格式错误');
-                // 合并到现有数据库（不清空原有）
-                for (const item of data) {
-                    await addItem(item);
-                }
-                await loadItems(); renderGrid(searchInput.value);
-                showToast('📥 导入成功！');
-            } catch (e) {
-                showToast('❌ 导入失败，文件格式不正确', false);
-            }
-        }
+    async function importData(file) {
+      try {
+        const text = await file.text();
+        const data = JSON.parse(text);
+        if (!Array.isArray(data)) throw new Error('格式错误');
+        for (const item of data) { await addItem(item); }
+        await loadItems(); renderGrid();
+        showToast('📥 导入成功！');
+      } catch (e) {
+        showToast('❌ 导入失败，文件格式不正确', false);
+      }
+    }
 
-        // 事件绑定
-        btnAdd.addEventListener('click', addItemHandler);
-        searchInput.addEventListener('input', () => renderGrid(searchInput.value));
-        btnDeleteItem.addEventListener('click', () => currentItemId && deleteItemHandler(currentItemId));
-        btnModalClose.addEventListener('click', closeModal);
-        btnCopyPrompt.addEventListener('click', copyPrompt);
-        btnEdit.addEventListener('click', openEdit);
-        btnSaveEdit.addEventListener('click', saveEdit);
-        btnCancelEdit.addEventListener('click', () => editOverlay.style.display='none');
-        modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
-        editOverlay.addEventListener('click', (e) => { if(e.target === editOverlay) editOverlay.style.display='none'; });
-        document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { closeModal(); editOverlay.style.display='none'; } });
+    // 事件绑定
+    btnAdd.addEventListener('click', addItemHandler);
+    searchInput.addEventListener('input', renderGrid);
+    btnDeleteItem.addEventListener('click', () => currentItemId && deleteItemHandler(currentItemId));
+    btnModalClose.addEventListener('click', closeModal);
+    btnCopyPrompt.addEventListener('click', copyPrompt);
+    btnEdit.addEventListener('click', openEdit);
+    btnSaveEdit.addEventListener('click', saveEdit);
+    btnCancelEdit.addEventListener('click', () => editOverlay.style.display='none');
+    modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
+    editOverlay.addEventListener('click', (e) => { if(e.target === editOverlay) editOverlay.style.display='none'; });
+    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { closeModal(); editOverlay.style.display='none'; } });
 
-        // 文件上传
-        const uploadArea = document.getElementById('fileUploadArea');
-        uploadArea.addEventListener('click', () => fileInput.click());
-        fileInput.addEventListener('change', () => { if(fileInput.files[0]){ uploadText.textContent = fileInput.files[0].name; imageUrl.value = ''; } });
-        imageUrl.addEventListener('input', () => { if(imageUrl.value){ fileInput.value=''; uploadText.textContent='点击选择图片'; } });
-        uploadArea.addEventListener('dragover', (e) => e.preventDefault());
-        uploadArea.addEventListener('drop', (e) => { e.preventDefault(); if(e.dataTransfer.files[0]){ fileInput.files = e.dataTransfer.files; uploadText.textContent = e.dataTransfer.files[0].name; imageUrl.value=''; } });
+    const uploadArea = document.getElementById('fileUploadArea');
+    uploadArea.addEventListener('click', () => fileInput.click());
+    fileInput.addEventListener('change', () => { if(fileInput.files[0]){ uploadText.textContent = fileInput.files[0].name; imageUrl.value = ''; } });
+    imageUrl.addEventListener('input', () => { if(imageUrl.value){ fileInput.value=''; uploadText.textContent='点击选择图片'; } });
+    uploadArea.addEventListener('dragover', (e) => e.preventDefault());
+    uploadArea.addEventListener('drop', (e) => { e.preventDefault(); if(e.dataTransfer.files[0]){ fileInput.files = e.dataTransfer.files; uploadText.textContent = e.dataTransfer.files[0].name; imageUrl.value=''; } });
 
-        // 备份按钮
-        btnExport.addEventListener('click', exportData);
-        btnImport.addEventListener('click', () => importFile.click());
-        importFile.addEventListener('change', () => { if(importFile.files[0]) importData(importFile.files[0]); });
+    btnExport.addEventListener('click', exportData);
+    btnImport.addEventListener('click', () => importFile.click());
+    importFile.addEventListener('change', () => { if(importFile.files[0]) importData(importFile.files[0]); });
 
-        // 启动
-        (async () => {
-            try { await openDB(); await loadItems(); renderGrid(); } catch(e) { showToast('数据库初始化失败，请检查浏览器设置', false); }
-        })();
+    // 初始化
+    (async () => {
+      try {
+        await openDB();
+        await loadItems();
+        updateUIMode(); // 默认访客模式
+        renderGrid();
+      } catch (e) {
+        showToast('数据库初始化失败，请检查浏览器设置', false);
+      }
     })();
+  })();
 </script>
 </body>
 </html>
