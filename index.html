@@ -230,7 +230,7 @@
   const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
   const ADMIN_EMAIL = 'admin@wordvault.com';
-  const ADMIN_PASSWORD = '5201314';
+  // 密码由用户手动输入，不写死在代码里
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -257,14 +257,16 @@
     }
   }
 
-  // 管理员登录：用 Supabase Auth 登录
+  // 管理员登录：弹出密码输入框
   $('#adminLoginBtn').addEventListener('click', async () => {
+    const pwd = prompt('请输入管理员密码：');
+    if (!pwd) return;
     const { error } = await supabase.auth.signInWithPassword({
       email: ADMIN_EMAIL,
-      password: ADMIN_PASSWORD,
+      password: pwd,
     });
     if (error) {
-      alert('管理员登录失败，请检查账号是否存在：' + error.message);
+      alert('密码错误或管理员账号不存在！');
       return;
     }
     isAdmin = true;
@@ -481,7 +483,6 @@
       prompt
     }));
 
-    // 现在不需要自定义 headers 了，用户已登录，RLS 会根据 email 放行
     const { error } = await supabase.from('images').insert(rows);
 
     if (error) {
@@ -609,7 +610,7 @@
     setTimeout(() => t.remove(), 2300);
   }
 
-  // 启动：检查会话，加载数据
+  // 启动
   checkSession();
   loadItems();
 </script>
