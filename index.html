@@ -134,7 +134,6 @@
     <p id="modeHint">访客模式 · 实时同步</p>
   </div>
 
-  <!-- 添加图片卡片 (仅管理员可见) -->
   <div class="card admin-only" id="addCard">
     <h3>📥 存入新图片 (可批量拖拽，可删除预览)</h3>
     <div class="form-grid">
@@ -169,7 +168,6 @@
     </div>
   </div>
 
-  <!-- 图片库卡片 -->
   <div class="card">
     <h3>🌸 词库浏览</h3>
     <div class="tabs" id="categoryTabs">
@@ -188,7 +186,6 @@
   </div>
 </div>
 
-<!-- 图片详情弹窗 -->
 <div class="modal-overlay" id="modalOverlay" style="display:none;">
   <div class="modal">
     <img id="modalImage" src="" style="display:none;">
@@ -205,7 +202,6 @@
   </div>
 </div>
 
-<!-- 编辑弹窗 -->
 <div class="modal-overlay" id="editOverlay" style="display:none;">
   <div class="modal">
     <h3>✏️ 编辑信息</h3>
@@ -231,7 +227,6 @@
 <script type="module">
   import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-  // ✅ 已填入您的 Supabase 信息
   const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
   const ADMIN_PASSWORD = '5201314';
@@ -261,7 +256,6 @@
     }
   }
 
-  // 管理员登录/退出
   $('#adminLoginBtn').addEventListener('click', () => {
     const pwd = prompt('请输入管理员密码：');
     if (pwd === ADMIN_PASSWORD) {
@@ -278,7 +272,6 @@
     showToast('已退出管理');
   });
 
-  // 从云端加载所有图片
   async function loadItems() {
     const { data, error } = await supabase
       .from('images')
@@ -314,7 +307,7 @@
     grid.innerHTML = filtered.map(item => `
       <div class="image-card" data-id="${item.id}">
         <div class="img-wrapper">
-          <img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">
+          <img src="${escapeHtml(item.imagedata)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">
           <span class="img-number">#${item.number}</span>
         </div>
         <div class="card-info">
@@ -332,7 +325,6 @@
     return div.innerHTML;
   }
 
-  // 选项卡切换
   $('#categoryTabs').addEventListener('click', (e) => {
     if (e.target.classList.contains('tab-btn')) {
       currentCategory = e.target.dataset.cat;
@@ -345,7 +337,6 @@
 
   $('#searchInput').addEventListener('input', renderGrid);
 
-  // ---------- 文件预览功能 ----------
   function updatePreview() {
     const container = $('#previewContainer');
     container.innerHTML = '';
@@ -410,7 +401,6 @@
     }
   });
 
-  // 图片压缩
   function compressImage(file) {
     return new Promise((resolve) => {
       const reader = new FileReader();
@@ -435,7 +425,6 @@
     });
   }
 
-  // 添加图片到云端
   $('#btnAdd').addEventListener('click', async () => {
     if (!isAdmin) return showToast('需要管理员权限', false);
     const prompt = $('#promptInput').value.trim();
@@ -459,7 +448,6 @@
 
     if (!imagesToUpload.length) return showToast('请提供图片URL或选择文件', false);
 
-    // 获取当前分类最大编号
     const { data: maxData } = await supabase
       .from('images')
       .select('number')
@@ -472,7 +460,7 @@
       id: crypto.randomUUID ? crypto.randomUUID() : 'img_' + Date.now() + '_' + i,
       number: nextNum + i,
       category,
-      imageData: imgData,
+      imagedata: imgData,   // ✅ 改为小写
       prompt
     }));
 
@@ -485,7 +473,6 @@
       return;
     }
 
-    // 清空表单
     $('#imageUrl').value = '';
     $('#promptInput').value = '';
     pendingFiles = [];
@@ -494,7 +481,6 @@
     showToast('✅ 已同步到云端！所有设备可见。');
   });
 
-  // 删除图片
   async function deleteItem(id) {
     if (!isAdmin) return showToast('需要管理员权限', false);
     const item = allItems.find(i => i.id === id);
@@ -515,7 +501,7 @@
   function openModal(id) {
     const item = allItems.find(i => i.id === id);
     if (!item) return;
-    $('#modalImage').src = item.imageData;
+    $('#modalImage').src = item.imagedata;   // ✅ 改为小写
     $('#modalImage').style.display = 'block';
     $('#modalPlaceholder').style.display = 'none';
     const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
@@ -535,7 +521,6 @@
     if (e.target === $('#modalOverlay')) closeModal();
   });
 
-  // 复制提示词
   $('#btnCopyPrompt').addEventListener('click', async () => {
     const text = $('#modalPrompt').textContent;
     if (!text) return;
@@ -559,7 +544,6 @@
     setTimeout(() => $('#copyFeedback').textContent = '', 2000);
   });
 
-  // 编辑
   $('#btnEdit').addEventListener('click', () => {
     if (!isAdmin) return;
     const id = $('#btnEdit').dataset.id;
@@ -594,7 +578,6 @@
     deleteItem($('#btnDeleteItem').dataset.id);
   });
 
-  // ESC 关闭弹窗
   document.addEventListener('keydown', (e) => {
     if (e.key === 'Escape') {
       closeModal();
