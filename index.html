@@ -135,8 +135,10 @@
     }
     @keyframes toast { 0%{opacity:0;transform:translateX(-50%) translateY(20px);} 10%{opacity:1;transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0;} }
     .backup-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
+    /* 管理员按钮默认隐藏 */
     .admin-only { display: none; }
-    .admin-mode .admin-only { display: flex; }
+    /* 当body有admin-mode类时，全局显示管理员按钮 */
+    body.admin-mode .admin-only { display: flex; }
     .login-modal {
       background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 360px; text-align: center;
     }
@@ -186,7 +188,7 @@
         </select>
       </div>
       <div class="form-group">
-        <label>💬 提示词 (所有图片共用)</label>
+        <label>💬 提示词 (所有选中图片将共用此提示词)</label>
         <textarea id="promptInput" placeholder="输入这批图片的提示词..."></textarea>
       </div>
       <button class="btn btn-primary" id="btnAdd">✨ 存入图片与提示词</button>
@@ -272,12 +274,10 @@
     const ADMIN_PASSWORD = '5201314';
     let isAdmin = false;
     let currentCategory = 'rest';
-
-    // ---------- 待上传文件列表（数组管理，解决覆盖问题）----------
-    let pendingFiles = [];
+    let pendingFiles = []; // 待上传文件数组
 
     // ---------- IndexedDB ----------
-    const DB_NAME = 'SunRestWordVault4';
+    const DB_NAME = 'SunRestWordVault5';
     let db = null;
     function openDB() {
       return new Promise((resolve, reject) => {
@@ -377,7 +377,6 @@
     let currentItemId = null;
 
     // DOM 元素
-    const appScreen = document.getElementById('appScreen');
     const adminLoginBtn = document.getElementById('adminLoginBtn');
     const adminLogoutBtn = document.getElementById('adminLogoutBtn');
     const modeHint = document.getElementById('modeHint');
@@ -418,17 +417,19 @@
 
     const categoryNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
 
+    // 切换管理员模式：给body添加/移除admin-mode类
     function updateUIMode() {
       if (isAdmin) {
-        appScreen.classList.add('admin-mode');
+        document.body.classList.add('admin-mode');
         modeHint.textContent = '管理员模式 · 可编辑';
         adminLoginBtn.style.display = 'none';
         adminLogoutBtn.style.display = 'inline-flex';
       } else {
-        appScreen.classList.remove('admin-mode');
+        document.body.classList.remove('admin-mode');
         modeHint.textContent = '访客模式 · 仅浏览';
         adminLoginBtn.style.display = 'inline-flex';
         adminLogoutBtn.style.display = 'none';
+        // 关闭编辑弹窗
         editOverlay.style.display = 'none';
       }
       renderGrid();
@@ -519,7 +520,7 @@
     fileInput.addEventListener('change', () => {
       if (fileInput.files.length > 0) {
         addFiles(fileInput.files);
-        fileInput.value = ''; // 清空以便重新选择相同文件
+        fileInput.value = ''; // 清空以便重新选择
       }
     });
 
@@ -603,7 +604,7 @@
         }
 
         if (pendingFiles.length > 0) {
-          showToast(`正在压缩并保存 ${pendingFiles.length} 张图片...`);
+          showToast(`正在压缩并保存 ${pendingFiles.length} 张图片（共享提示词）...`);
           for (let i = 0; i < pendingFiles.length; i++) {
             const compressed = await compressImage(pendingFiles[i]);
             const newItem = {
@@ -626,7 +627,7 @@
         pendingFiles = [];
         renderPreview();
         promptInput.value = '';
-        showToast('✅ 保存成功！');
+        showToast('✅ 保存成功！所有图片已共用提示词。');
       } catch (err) {
         let msg = '保存失败';
         if (err.name === 'QuotaExceededError') msg = '存储空间已满';
@@ -705,11 +706,15 @@
 
     async function saveEdit() {
       const item = items.find(i => i.id === currentItemId); if(!item) return;
-      item.category = editCategory.value;
-      item.prompt = editPrompt.value.trim();
+      const newCategory = editCategory.value;
+      const newPrompt = editPrompt.value.trim();
+      if (!newPrompt) { showToast('提示词不能为空', false); return; }
+      item.category = newCategory;
+      item.prompt = newPrompt;
       await updateItem(item);
       await loadItems();
       renderGrid();
+      // 更新详情弹窗显示
       modalNumberDisplay.innerHTML = `📌 编号 #${item.number} <span class="category-badge">${categoryNames[item.category]}</span>`;
       modalPrompt.textContent = item.prompt;
       editOverlay.style.display = 'none';
@@ -761,7 +766,7 @@
       try {
         await openDB();
         await loadItems();
-        updateUIMode();
+        updateUIMode(); // 默认访客模式，body无admin-mode类
         renderGrid();
       } catch (e) {
         showToast('数据库初始化失败，请检查浏览器设置', false);
