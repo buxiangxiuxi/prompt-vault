@@ -6,436 +6,288 @@
   <title>Sun和休息の词会 · 第一期</title>
   <style>
     :root {
-      --bg: #faf8f5; --card-bg: #ffffff; --card-border: #e8dfd3;
-      --text: #4a3f35; --text-secondary: #8b7a6b; --accent: #c49a6c;
-      --accent-hover: #b88655; --input-bg: #fefcf9; --input-border: #dbd0c0;
-      --radius: 20px; --radius-sm: 14px;
+      --bg: #faf8f5;
+      --card-bg: #ffffff;
+      --card-border: #e8dfd3;
+      --text: #4a3f35;
+      --accent: #c49a6c;
+      --input-bg: #fefcf9;
+      --input-border: #dbd0c0;
+      --radius: 16px;
+      --radius-sm: 12px;
     }
-    * { margin: 0; padding: 0; box-sizing: border-box; }
+    * { margin:0; padding:0; box-sizing:border-box; }
     body {
       font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: #faf8f5; color: var(--text);
-      min-height: 100vh; padding: 24px 16px;
-      display: flex; justify-content: center;
+      background: #faf8f5;
+      color: #4a3f35;
+      min-height: 100vh;
+      padding: 20px 12px;
+      display: flex;
+      justify-content: center;
     }
-    .app-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; }
+    .app { max-width: 900px; width: 100%; display: flex; flex-direction: column; gap: 18px; }
     .header { text-align: center; }
-    .header h1 { font-size: 2rem; color: #4a3a2e; margin: 8px 0; }
+    .header h1 { font-size: 1.8rem; color: #4a3a2e; }
     .admin-bar { text-align: right; margin-bottom: 8px; }
     .card {
-      background: #fff; border: 1px solid var(--card-border); border-radius: var(--radius);
-      padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      background: #fff; border: 1px solid #e8dfd3; border-radius: var(--radius);
+      padding: 20px; box-shadow: 0 2px 12px rgba(0,0,0,0.03);
     }
-    .card h3 { font-size: 1.1rem; margin-bottom: 18px; color: #5c4a3a; }
-    .form-grid { display: flex; flex-direction: column; gap: 14px; }
-    .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
-    .form-group { flex: 1; min-width: 200px; }
-    label { font-size: 0.85rem; font-weight: 500; color: #8b7a6b; display: block; margin-bottom: 5px; }
-    input, textarea, select {
-      width: 100%; padding: 12px 16px; background: var(--input-bg);
-      border: 1.5px solid var(--input-border); border-radius: var(--radius-sm);
-      font-size: 0.95rem; font-family: inherit; outline: none;
+    .card h3 { font-size: 1rem; margin-bottom: 14px; color: #5c4a3a; }
+    .flex-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .flex-col { flex: 1; min-width: 180px; }
+    label { font-size: 0.8rem; font-weight: 500; color: #8b7a6b; display: block; margin-bottom: 4px; }
+    input, textarea, select, button {
+      padding: 10px 14px; background: #fefcf9; border: 1.5px solid #dbd0c0;
+      border-radius: var(--radius-sm); font-size: 0.9rem; outline: none;
+      width: 100%; font-family: inherit;
     }
-    input:focus, textarea:focus, select:focus {
-      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196,154,108,0.15);
-    }
-    textarea { min-height: 70px; resize: vertical; }
-    .file-upload-area {
-      border: 2px dashed #dbd0c0; border-radius: var(--radius-sm); padding: 16px;
-      text-align: center; cursor: pointer; background: #fefcf9; color: #8b7a6b;
-    }
-    .file-upload-area:hover { border-color: var(--accent); background: #fdf8f2; }
-    .file-upload-area.drag-over { border-color: var(--accent); background: #f0e5d8; }
-    .file-info { font-size: 0.8rem; color: #8b7a6b; margin-top: 4px; }
-    .preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
-    .preview-item {
-      width: 70px; height: 70px; border-radius: 10px; overflow: hidden;
-      border: 1px solid #e8dfd3; position: relative;
-    }
-    .preview-item img { width: 100%; height: 100%; object-fit: cover; }
-    .preview-item .remove-btn {
-      position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
-      background: rgba(201,107,107,0.9); color: white; border: none; border-radius: 50%;
-      font-size: 12px; line-height: 20px; text-align: center; cursor: pointer;
-    }
+    textarea { resize: vertical; min-height: 60px; }
     .btn {
-      padding: 11px 22px; border: none; border-radius: var(--radius-sm);
-      font-weight: 600; cursor: pointer; font-size: 0.9rem; display: inline-flex;
-      align-items: center; gap: 6px; justify-content: center;
+      padding: 10px 18px; background: #c49a6c; color: white; border: none;
+      border-radius: var(--radius-sm); font-weight: 600; cursor: pointer;
+      display: inline-flex; align-items: center; justify-content: center; gap: 5px;
     }
-    .btn-primary { background: var(--accent); color: white; width: 100%; }
-    .btn-primary:hover { background: var(--accent-hover); }
     .btn-outline { background: transparent; border: 1.5px solid #dbd0c0; color: #4a3f35; }
-    .btn-outline:hover { background: #f0e5d8; }
-    .btn-danger { border: 1.5px solid rgba(201,107,107,0.3); color: #c96b6b; }
-    .search-wrapper { position: relative; margin-bottom: 16px; }
-    .search-wrapper input { padding-right: 44px; }
-    .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
-    .items-count { background: #f0e5d8; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; }
-    .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
-    .tab-btn {
-      padding: 10px 20px; border-radius: 14px; border: 1.5px solid #dbd0c0;
-      background: transparent; color: #4a3f35; cursor: pointer; font-weight: 500;
+    .btn-sm { font-size: 0.8rem; padding: 6px 12px; }
+    .tabs { display: flex; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+    .tab {
+      padding: 8px 16px; border-radius: 12px; border: 1.5px solid #dbd0c0;
+      background: transparent; cursor: pointer; font-size: 0.85rem;
     }
-    .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
-    .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
-    .image-card {
-      background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #e8dfd3;
-      cursor: pointer; transition: 0.2s;
+    .tab.active { background: #c49a6c; color: white; border-color: #c49a6c; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px; }
+    .img-card {
+      border-radius: 12px; overflow: hidden; border: 1px solid #e8dfd3; background: #fff;
+      cursor: pointer; transition: 0.15s;
     }
-    .image-card:hover { transform: translateY(-3px); box-shadow: 0 8px 20px rgba(0,0,0,0.05); }
-    .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; position: relative; }
-    .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
-    .img-number {
-      position: absolute; top: 6px; left: 6px; background: rgba(196,154,108,0.9);
-      color: white; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
-    }
-    .card-info { padding: 10px; font-size: 0.8rem; color: #7a6a5c; }
-    .card-prompt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-    .no-items { grid-column: 1/-1; text-align: center; padding: 40px; color: #8b7a6b; }
-    .modal-overlay {
-      position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
-      display: flex; align-items: center; justify-content: center; z-index: 100;
-    }
+    .img-card:hover { transform: translateY(-2px); box-shadow: 0 6px 16px rgba(0,0,0,0.05); }
+    .img-wrap { aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; position: relative; }
+    .img-wrap img { width: 100%; height: 100%; object-fit: contain; }
+    .img-number { position: absolute; top: 4px; left: 4px; background: rgba(196,154,108,0.85); color: white; font-size: 0.7rem; padding: 2px 6px; border-radius: 8px; }
+    .img-info { padding: 8px; font-size: 0.75rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .modal {
-      background: white; border-radius: 20px; padding: 28px; width: 90%;
-      max-width: 500px; max-height: 90vh; overflow-y: auto;
+      position: fixed; inset: 0; background: rgba(0,0,0,0.3); display: flex;
+      align-items: center; justify-content: center; z-index: 100;
     }
-    .modal img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 16px; }
-    .prompt-box {
-      background: #fdf9f4; padding: 14px; border-radius: 12px; margin: 8px 0 16px;
-      white-space: pre-wrap; word-break: break-word;
+    .modal-content {
+      background: white; border-radius: 18px; padding: 24px; width: 90%; max-width: 420px;
+      max-height: 85vh; overflow-y: auto;
     }
-    .btn-row { display: flex; gap: 10px; flex-wrap: wrap; }
+    .modal img { width: 100%; max-height: 260px; object-fit: contain; border-radius: 10px; }
     .toast {
       position: fixed; bottom: 30px; left: 50%; transform: translateX(-50%);
-      background: white; padding: 12px 24px; border-radius: 30px; box-shadow: 0 8px 20px rgba(0,0,0,0.1);
-      z-index: 200; animation: toast 2.3s forwards;
+      background: #fff; padding: 10px 20px; border-radius: 20px; box-shadow: 0 6px 16px rgba(0,0,0,0.1);
+      z-index: 200; font-size: 0.85rem;
     }
-    @keyframes toast { 0%{opacity:0;transform:translateX(-50%) translateY(20px);} 10%{opacity:1;transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0;} }
     .admin-only { display: none; }
-    body.admin-mode .admin-only { display: flex; }
-    .category-badge {
-      display: inline-block; background: #f0e5d8; padding: 2px 8px; border-radius: 10px;
-      font-size: 0.7rem; margin-left: 6px; vertical-align: middle;
-    }
+    body.admin .admin-only { display: inline-flex; }
   </style>
-  <!-- 本地化引入 supabase-js，不再依赖外部 CDN -->
-  <script src="js/supabase.min.js"></script>
 </head>
 <body>
-<div class="app-container">
+<div class="app">
   <div class="header">
     <div class="admin-bar">
-      <button class="btn btn-outline btn-sm" id="adminLoginBtn">🔒 管理员登录</button>
-      <button class="btn btn-outline btn-sm admin-only" id="adminLogoutBtn" style="display:none;">🔓 退出管理</button>
+      <button class="btn btn-outline btn-sm" id="loginBtn">🔒 管理员登录</button>
+      <button class="btn btn-outline btn-sm admin-only" id="logoutBtn" style="display:none;">🔓 退出</button>
     </div>
-    <span class="icon">🌸</span>
-    <h1>Sun和休息の词会 · 第一期</h1>
+    <h1>🌸 Sun和休息の词会 · 第一期</h1>
     <p id="modeHint">访客模式 · 实时同步</p>
   </div>
 
+  <!-- 添加图片卡片（管理员可见） -->
   <div class="card admin-only" id="addCard">
-    <h3>📥 存入新图片 (可批量拖拽，可删除预览)</h3>
-    <div class="form-grid">
-      <div class="form-row">
-        <div class="form-group" style="flex:2;">
-          <label>🔗 图片URL (单张)</label>
-          <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
-        </div>
-        <div class="form-group" style="flex:1;">
-          <label>📁 或拖拽/批量上传</label>
-          <div class="file-upload-area" id="fileUploadArea">
-            <span id="uploadText">点击选择或拖拽图片到此处</span>
-            <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
-          </div>
-          <div class="file-info" id="fileCountInfo"></div>
-          <div class="preview-container" id="previewContainer"></div>
-        </div>
+    <h3>📥 存入新图片</h3>
+    <div class="flex-row">
+      <div class="flex-col">
+        <label>🔗 图片URL</label>
+        <input type="url" id="urlInput" placeholder="https://...">
       </div>
-      <div class="form-group">
-        <label>📂 选择词库</label>
-        <select id="categorySelect">
-          <option value="rest">休息的词库</option>
-          <option value="sun">Sun的词库</option>
-          <option value="gift">赠词词库</option>
-        </select>
+      <div class="flex-col">
+        <label>📁 或上传文件</label>
+        <input type="file" id="fileInput" accept="image/*" multiple style="padding:8px;">
       </div>
-      <div class="form-group">
-        <label>💬 提示词 (所有选中图片将共用此提示词)</label>
-        <textarea id="promptInput" placeholder="输入这批图片的提示词..."></textarea>
-      </div>
-      <button class="btn btn-primary" id="btnAdd">✨ 存入云端</button>
     </div>
-  </div>
-
-  <div class="card">
-    <h3>🌸 词库浏览</h3>
-    <div class="tabs" id="categoryTabs">
-      <button class="tab-btn active" data-cat="rest">🛋️ 休息的词库</button>
-      <button class="tab-btn" data-cat="sun">☀️ Sun的词库</button>
-      <button class="tab-btn" data-cat="gift">🎁 赠词词库</button>
-    </div>
-    <div class="search-wrapper">
-      <input type="text" id="searchInput" placeholder="搜索当前词库的提示词...">
-      <span class="search-icon">🔍</span>
-    </div>
-    <div class="items-header">
-      <span class="items-count" id="itemsCount">加载中...</span>
-    </div>
-    <div class="image-grid" id="imageGrid"></div>
-  </div>
-</div>
-
-<div class="modal-overlay" id="modalOverlay" style="display:none;">
-  <div class="modal">
-    <img id="modalImage" src="" style="display:none;">
-    <div id="modalPlaceholder" style="width:100%;height:200px;background:#f0e9df;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px;">🖼️</div>
-    <h3 id="modalNumberDisplay"></h3>
-    <div class="prompt-box" id="modalPrompt"></div>
-    <div class="btn-row">
-      <button class="btn btn-primary" id="btnCopyPrompt">📋 复制提示词</button>
-      <button class="btn btn-outline admin-only" id="btnEdit">✏️ 编辑</button>
-      <button class="btn btn-outline" id="btnModalClose">关闭</button>
-      <button class="btn btn-danger btn-sm admin-only" id="btnDeleteItem">🗑️ 删除</button>
-    </div>
-    <span id="copyFeedback" style="color:#7a9a7e; font-size:0.8rem;"></span>
-  </div>
-</div>
-
-<div class="modal-overlay" id="editOverlay" style="display:none;">
-  <div class="modal">
-    <h3>✏️ 编辑信息</h3>
-    <div class="form-group" style="margin-top:12px;">
+    <div style="margin-top:10px;">
       <label>📂 词库</label>
-      <select id="editCategory">
+      <select id="categorySelect">
         <option value="rest">休息的词库</option>
         <option value="sun">Sun的词库</option>
         <option value="gift">赠词词库</option>
       </select>
     </div>
-    <div class="form-group">
+    <div style="margin-top:10px;">
       <label>💬 提示词</label>
-      <textarea id="editPrompt" rows="4"></textarea>
+      <textarea id="promptInput" placeholder="输入提示词（所有图片共用）"></textarea>
     </div>
-    <div class="btn-row" style="margin-top:16px;">
-      <button class="btn btn-primary" id="btnSaveEdit">💾 保存修改</button>
-      <button class="btn btn-outline" id="btnCancelEdit">取消</button>
+    <button class="btn" id="addBtn" style="margin-top:12px; width:100%;">✨ 存入云端</button>
+  </div>
+
+  <!-- 图片库 -->
+  <div class="card">
+    <div class="tabs" id="tabs">
+      <button class="tab active" data-cat="rest">🛋️ 休息的词库</button>
+      <button class="tab" data-cat="sun">☀️ Sun的词库</button>
+      <button class="tab" data-cat="gift">🎁 赠词词库</button>
+    </div>
+    <input type="text" id="searchInput" placeholder="🔍 搜索提示词..." style="margin-bottom:12px;">
+    <p id="countInfo" style="font-size:0.8rem; color:#8b7a6b; margin-bottom:10px;">加载中...</p>
+    <div class="grid" id="grid"></div>
+  </div>
+</div>
+
+<!-- 详情弹窗 -->
+<div class="modal" id="detailModal" style="display:none;">
+  <div class="modal-content">
+    <img id="detailImg" src="" style="display:none;">
+    <div id="detailPlaceholder" style="width:100%; height:180px; background:#f0e9df; border-radius:10px; display:flex; align-items:center; justify-content:center; font-size:3rem;">🖼️</div>
+    <h3 id="detailNumber"></h3>
+    <div style="background:#fdf9f4; padding:12px; border-radius:10px; margin:8px 0; white-space:pre-wrap;" id="detailPrompt"></div>
+    <div class="flex-row" style="margin-top:12px;">
+      <button class="btn" id="copyBtn">📋 复制</button>
+      <button class="btn btn-outline admin-only" id="editBtn">✏️ 编辑</button>
+      <button class="btn btn-outline" id="closeDetailBtn">关闭</button>
+      <button class="btn btn-outline admin-only" id="deleteBtn" style="color:#c96b6b;">🗑️ 删除</button>
+    </div>
+  </div>
+</div>
+
+<!-- 编辑弹窗 -->
+<div class="modal" id="editModal" style="display:none;">
+  <div class="modal-content">
+    <h3>✏️ 编辑信息</h3>
+    <select id="editCategory" style="margin:10px 0;">
+      <option value="rest">休息的词库</option>
+      <option value="sun">Sun的词库</option>
+      <option value="gift">赠词词库</option>
+    </select>
+    <textarea id="editPrompt" rows="3"></textarea>
+    <div class="flex-row" style="margin-top:12px;">
+      <button class="btn" id="saveEditBtn">💾 保存</button>
+      <button class="btn btn-outline" id="cancelEditBtn">取消</button>
     </div>
   </div>
 </div>
 
 <script>
-  // 使用已经通过 <script> 标签加载的全局 supabase 对象
-  const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
+  // 配置
+  const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co/rest/v1/images';
   const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
-  const ADMIN_EMAIL = 'admin@wordvault.com';
-
-  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const ADMIN_PASSWORD = '5201314';
 
   let isAdmin = false;
-  let currentCategory = 'rest';
-  let pendingFiles = [];
-  let allItems = [];
+  let currentCat = 'rest';
+  let items = [];
 
-  const $ = (sel) => document.querySelector(sel);
-  const $$ = (sel) => document.querySelectorAll(sel);
-
-  function updateAdminUI() {
+  // 封装 fetch，自动处理认证头
+  function supabaseFetch(path, options = {}) {
+    const headers = {
+      'apikey': SUPABASE_ANON_KEY,
+      'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      'Content-Type': 'application/json',
+      ...options.headers,
+    };
     if (isAdmin) {
-      document.body.classList.add('admin-mode');
-      $('#modeHint').textContent = '管理员模式 · 云端同步';
-      $('#adminLoginBtn').style.display = 'none';
-      $('#adminLogoutBtn').style.display = 'inline-flex';
-    } else {
-      document.body.classList.remove('admin-mode');
-      $('#modeHint').textContent = '访客模式 · 实时同步';
-      $('#adminLoginBtn').style.display = 'inline-flex';
-      $('#adminLogoutBtn').style.display = 'none';
-      $('#editOverlay').style.display = 'none';
+      headers['x-admin-password'] = ADMIN_PASSWORD;
     }
-  }
-
-  // 管理员登录：弹出密码输入框
-  $('#adminLoginBtn').addEventListener('click', async () => {
-    const pwd = prompt('请输入管理员密码：');
-    if (!pwd) return;
-    const { error } = await supabase.auth.signInWithPassword({
-      email: ADMIN_EMAIL,
-      password: pwd,
+    return fetch(`${SUPABASE_URL}${path}`, {
+      ...options,
+      headers,
+    }).then(res => {
+      if (!res.ok) throw new Error(res.statusText);
+      return res;
     });
-    if (error) {
-      alert('密码错误或管理员账号不存在！');
-      return;
-    }
-    isAdmin = true;
-    updateAdminUI();
-    showToast('已切换为管理员模式');
-  });
-
-  // 管理员退出
-  $('#adminLogoutBtn').addEventListener('click', async () => {
-    await supabase.auth.signOut();
-    isAdmin = false;
-    updateAdminUI();
-    showToast('已退出管理');
-  });
-
-  // 检查页面加载时是否已有登录状态
-  async function checkSession() {
-    const { data: { session } } = await supabase.auth.getSession();
-    if (session && session.user.email === ADMIN_EMAIL) {
-      isAdmin = true;
-      updateAdminUI();
-    }
   }
 
+  // 加载所有图片
   async function loadItems() {
-    const { data, error } = await supabase
-      .from('images')
-      .select('*')
-      .order('created_at', { ascending: false });
-    if (error) {
-      console.error('加载失败:', error);
-      allItems = [];
-    } else {
-      allItems = data || [];
+    try {
+      const res = await supabaseFetch('?order=created_at.desc');
+      items = await res.json();
+    } catch (e) {
+      items = [];
+      showToast('数据加载失败');
     }
     renderGrid();
   }
 
-  function getFilteredItems() {
-    const term = $('#searchInput').value.trim().toLowerCase();
-    return allItems.filter(item => {
-      if (item.category !== currentCategory) return false;
-      if (!term) return true;
-      return item.prompt.toLowerCase().includes(term);
+  // 获取当前分类过滤后的图片
+  function getFiltered() {
+    const q = document.getElementById('searchInput').value.toLowerCase();
+    return items.filter(item => {
+      if (item.category !== currentCat) return false;
+      if (!q) return true;
+      return item.prompt.toLowerCase().includes(q);
     }).sort((a, b) => a.number - b.number);
   }
 
   function renderGrid() {
-    const filtered = getFilteredItems();
-    const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
-    $('#itemsCount').textContent = `${catNames[currentCategory]} · 共 ${filtered.length} 张`;
-    const grid = $('#imageGrid');
-    if (filtered.length === 0) {
-      grid.innerHTML = `<div class="no-items">🌸<br>暂无图片</div>`;
-      return;
-    }
+    const filtered = getFiltered();
+    const catNames = { rest:'休息的词库', sun:'Sun的词库', gift:'赠词词库' };
+    document.getElementById('countInfo').textContent = `${catNames[currentCat]} · 共 ${filtered.length} 张`;
+    const grid = document.getElementById('grid');
     grid.innerHTML = filtered.map(item => `
-      <div class="image-card" data-id="${item.id}">
-        <div class="img-wrapper">
-          <img src="${escapeHtml(item.imagedata)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">
+      <div class="img-card" data-id="${item.id}" onclick="openDetail('${item.id}')">
+        <div class="img-wrap">
+          <img src="${escapeHtml(item.imagedata)}" onerror="this.style.display='none';">
           <span class="img-number">#${item.number}</span>
         </div>
-        <div class="card-info">
-          <div class="card-prompt">${escapeHtml(item.prompt.substring(0, 30))}</div>
-        </div>
+        <div class="img-info">${escapeHtml(item.prompt.substring(0,20))}</div>
       </div>`).join('');
-    $$('.image-card').forEach(card => {
-      card.addEventListener('click', () => openModal(card.dataset.id));
-    });
   }
 
-  function escapeHtml(str) {
-    const div = document.createElement('div');
-    div.textContent = str;
-    return div.innerHTML;
-  }
+  function escapeHtml(s) { const d=document.createElement('div'); d.textContent=s; return d.innerHTML; }
 
-  $('#categoryTabs').addEventListener('click', (e) => {
-    if (e.target.classList.contains('tab-btn')) {
-      currentCategory = e.target.dataset.cat;
-      $$('.tab-btn').forEach(b => b.classList.remove('active'));
+  // 选项卡
+  document.getElementById('tabs').addEventListener('click', e => {
+    if (e.target.classList.contains('tab')) {
+      currentCat = e.target.dataset.cat;
+      document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
       e.target.classList.add('active');
-      $('#searchInput').value = '';
+      document.getElementById('searchInput').value = '';
       renderGrid();
     }
   });
 
-  $('#searchInput').addEventListener('input', renderGrid);
+  document.getElementById('searchInput').addEventListener('input', renderGrid);
 
-  function updatePreview() {
-    const container = $('#previewContainer');
-    container.innerHTML = '';
-    if (pendingFiles.length === 0) {
-      $('#fileCountInfo').textContent = '';
-      $('#uploadText').textContent = '点击选择或拖拽图片到此处';
-      return;
-    }
-    $('#uploadText').textContent = `已选择 ${pendingFiles.length} 张图片`;
-    $('#fileCountInfo').textContent = `共 ${pendingFiles.length} 个文件`;
-    pendingFiles.forEach((file, index) => {
-      const reader = new FileReader();
-      reader.onload = (e) => {
-        const div = document.createElement('div');
-        div.className = 'preview-item';
-        div.innerHTML = `
-          <img src="${e.target.result}" alt="预览">
-          <button class="remove-btn" data-index="${index}">✕</button>
-        `;
-        container.appendChild(div);
-        div.querySelector('.remove-btn').addEventListener('click', (ev) => {
-          ev.stopPropagation();
-          pendingFiles.splice(index, 1);
-          updatePreview();
-        });
-      };
-      reader.readAsDataURL(file);
-    });
-  }
-
-  $('#fileInput').addEventListener('change', () => {
-    if ($('#fileInput').files.length > 0) {
-      for (let f of $('#fileInput').files) pendingFiles.push(f);
-      updatePreview();
-      $('#fileInput').value = '';
-      $('#imageUrl').value = '';
+  // 管理员登录/退出
+  document.getElementById('loginBtn').addEventListener('click', () => {
+    const pwd = prompt('请输入管理员密码：');
+    if (pwd === ADMIN_PASSWORD) {
+      isAdmin = true;
+      document.body.classList.add('admin');
+      document.getElementById('modeHint').textContent = '管理员模式 · 云端同步';
+      document.getElementById('loginBtn').style.display = 'none';
+      document.getElementById('logoutBtn').style.display = 'inline-flex';
+      showToast('已切换为管理员模式');
+    } else if (pwd !== null) {
+      alert('密码错误');
     }
   });
-
-  const uploadArea = $('#fileUploadArea');
-  uploadArea.addEventListener('click', () => $('#fileInput').click());
-  uploadArea.addEventListener('dragover', (e) => {
-    e.preventDefault();
-    uploadArea.classList.add('drag-over');
-  });
-  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
-  uploadArea.addEventListener('drop', (e) => {
-    e.preventDefault();
-    uploadArea.classList.remove('drag-over');
-    if (e.dataTransfer.files.length > 0) {
-      for (let f of e.dataTransfer.files) pendingFiles.push(f);
-      updatePreview();
-      $('#imageUrl').value = '';
-    }
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    isAdmin = false;
+    document.body.classList.remove('admin');
+    document.getElementById('modeHint').textContent = '访客模式 · 实时同步';
+    document.getElementById('loginBtn').style.display = 'inline-flex';
+    document.getElementById('logoutBtn').style.display = 'none';
+    showToast('已退出管理');
   });
 
-  $('#imageUrl').addEventListener('input', () => {
-    if ($('#imageUrl').value.trim()) {
-      pendingFiles = [];
-      updatePreview();
-      $('#fileInput').value = '';
-    }
-  });
-
-  function compressImage(file) {
-    return new Promise((resolve) => {
+  // 图片压缩
+  function compress(file) {
+    return new Promise(resolve => {
       const reader = new FileReader();
       reader.onload = () => {
         const img = new Image();
         img.onload = () => {
           const canvas = document.createElement('canvas');
-          let width = img.width, height = img.height;
-          const maxWidth = 800;
-          if (width > maxWidth) {
-            height *= maxWidth / width;
-            width = maxWidth;
-          }
-          canvas.width = width;
-          canvas.height = height;
-          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          let w = img.width, h = img.height;
+          const max = 800;
+          if (w > max) { h *= max/w; w = max; }
+          canvas.width = w; canvas.height = h;
+          canvas.getContext('2d').drawImage(img, 0, 0, w, h);
           resolve(canvas.toDataURL('image/jpeg', 0.7));
         };
         img.src = reader.result;
@@ -444,174 +296,132 @@
     });
   }
 
-  $('#btnAdd').addEventListener('click', async () => {
-    if (!isAdmin) return showToast('需要管理员权限', false);
-    const prompt = $('#promptInput').value.trim();
-    if (!prompt) return showToast('请输入提示词', false);
-    const category = $('#categorySelect').value;
-    const urlValue = $('#imageUrl').value.trim();
-    let imagesToUpload = [];
+  // 添加图片
+  document.getElementById('addBtn').addEventListener('click', async () => {
+    if (!isAdmin) return alert('无权限');
+    const prompt = document.getElementById('promptInput').value.trim();
+    if (!prompt) return alert('请输入提示词');
+    const category = document.getElementById('categorySelect').value;
+    const url = document.getElementById('urlInput').value.trim();
+    const files = document.getElementById('fileInput').files;
+    let imgs = [];
 
-    if (urlValue) {
-      if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) return showToast('URL格式不正确', false);
-      imagesToUpload.push(urlValue);
+    if (url) {
+      if (!url.startsWith('http') && !url.startsWith('data:')) return alert('URL格式不正确');
+      imgs.push(url);
     }
-
-    if (pendingFiles.length > 0) {
-      showToast(`正在压缩 ${pendingFiles.length} 张图片...`);
-      for (let file of pendingFiles) {
-        const dataUrl = await compressImage(file);
-        imagesToUpload.push(dataUrl);
-      }
+    if (files.length) {
+      for (let f of files) imgs.push(await compress(f));
     }
+    if (!imgs.length) return alert('请提供图片');
 
-    if (!imagesToUpload.length) return showToast('请提供图片URL或选择文件', false);
+    // 获取当前分类最大编号
+    const maxRes = await supabaseFetch(`?category=eq.${category}&order=number.desc&limit=1`);
+    const maxData = await maxRes.json();
+    let next = (maxData[0]?.number || 0) + 1;
 
-    const { data: maxData } = await supabase
-      .from('images')
-      .select('number')
-      .eq('category', category)
-      .order('number', { ascending: false })
-      .limit(1);
-    let nextNum = (maxData?.[0]?.number || 0) + 1;
-
-    const rows = imagesToUpload.map((imgData, i) => ({
-      id: crypto.randomUUID ? crypto.randomUUID() : 'img_' + Date.now() + '_' + i,
-      number: nextNum + i,
+    const rows = imgs.map((img, i) => ({
+      id: crypto.randomUUID ? crypto.randomUUID() : Date.now() + '' + i,
+      number: next + i,
       category,
-      imagedata: imgData,
+      imagedata: img,
       prompt
     }));
 
-    const { error } = await supabase.from('images').insert(rows);
-
-    if (error) {
-      showToast('保存失败：' + error.message, false);
-      return;
-    }
-
-    $('#imageUrl').value = '';
-    $('#promptInput').value = '';
-    pendingFiles = [];
-    updatePreview();
-    loadItems();
-    showToast('✅ 已同步到云端！所有设备可见。');
-  });
-
-  async function deleteItem(id) {
-    if (!isAdmin) return showToast('需要管理员权限', false);
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-    const confirmText = prompt(`⚠️ 请输入"确认删除"来删除编号 #${item.number} 的图片：`);
-    if (confirmText !== '确认删除') return showToast('取消删除', false);
-    const { error } = await supabase.from('images').delete().eq('id', id);
-    if (error) showToast('删除失败', false);
-    else {
-      closeModal();
-      loadItems();
-      showToast('已删除');
-    }
-  }
-
-  function openModal(id) {
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-    $('#modalImage').src = item.imagedata;
-    $('#modalImage').style.display = 'block';
-    $('#modalPlaceholder').style.display = 'none';
-    const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
-    $('#modalNumberDisplay').innerHTML = `📌 编号 #${item.number} <span class="category-badge">${catNames[item.category]}</span>`;
-    $('#modalPrompt').textContent = item.prompt;
-    $('#modalOverlay').style.display = 'flex';
-    $('#btnDeleteItem').dataset.id = id;
-    $('#btnEdit').dataset.id = id;
-  }
-
-  function closeModal() {
-    $('#modalOverlay').style.display = 'none';
-  }
-
-  $('#btnModalClose').addEventListener('click', closeModal);
-  $('#modalOverlay').addEventListener('click', (e) => {
-    if (e.target === $('#modalOverlay')) closeModal();
-  });
-
-  $('#btnCopyPrompt').addEventListener('click', async () => {
-    const text = $('#modalPrompt').textContent;
-    if (!text) return;
     try {
-      if (navigator.clipboard && window.isSecureContext) {
-        await navigator.clipboard.writeText(text);
-      } else {
-        const ta = document.createElement('textarea');
-        ta.value = text;
-        ta.style.position = 'fixed';
-        ta.style.opacity = '0';
-        document.body.appendChild(ta);
-        ta.select();
-        document.execCommand('copy');
-        document.body.removeChild(ta);
-      }
-      $('#copyFeedback').textContent = '✅ 已复制';
-    } catch (e) {
-      $('#copyFeedback').textContent = '❌ 复制失败';
-    }
-    setTimeout(() => $('#copyFeedback').textContent = '', 2000);
-  });
-
-  $('#btnEdit').addEventListener('click', () => {
-    if (!isAdmin) return;
-    const id = $('#btnEdit').dataset.id;
-    const item = allItems.find(i => i.id === id);
-    if (!item) return;
-    $('#editCategory').value = item.category;
-    $('#editPrompt').value = item.prompt;
-    $('#editOverlay').style.display = 'flex';
-    $('#btnSaveEdit').dataset.id = id;
-  });
-
-  $('#btnSaveEdit').addEventListener('click', async () => {
-    const id = $('#btnSaveEdit').dataset.id;
-    const newCat = $('#editCategory').value;
-    const newPrompt = $('#editPrompt').value.trim();
-    if (!newPrompt) return showToast('提示词不能为空', false);
-    const { error } = await supabase.from('images').update({
-      category: newCat,
-      prompt: newPrompt
-    }).eq('id', id);
-    if (error) showToast('修改失败', false);
-    else {
-      $('#editOverlay').style.display = 'none';
+      await supabaseFetch('', {
+        method: 'POST',
+        body: JSON.stringify(rows),
+        headers: { 'Prefer': 'return=minimal' }
+      });
+      // 清空
+      document.getElementById('urlInput').value = '';
+      document.getElementById('fileInput').value = '';
+      document.getElementById('promptInput').value = '';
       loadItems();
-      showToast('✅ 修改已保存');
+      showToast('✅ 已同步到云端');
+    } catch (e) {
+      showToast('保存失败：' + e.message);
     }
   });
 
-  $('#btnCancelEdit').addEventListener('click', () => $('#editOverlay').style.display = 'none');
+  // 详情弹窗
+  let currentId = null;
+  window.openDetail = function(id) {
+    const item = items.find(i => i.id === id);
+    if (!item) return;
+    currentId = id;
+    document.getElementById('detailImg').src = item.imagedata;
+    document.getElementById('detailImg').style.display = 'block';
+    document.getElementById('detailPlaceholder').style.display = 'none';
+    document.getElementById('detailNumber').innerHTML = `📌 编号 #${item.number} <span style="background:#f0e5d8;padding:2px 6px;border-radius:8px;font-size:0.7rem;">${getCatName(item.category)}</span>`;
+    document.getElementById('detailPrompt').textContent = item.prompt;
+    document.getElementById('detailModal').style.display = 'flex';
+  };
+  function getCatName(c) { return {rest:'休息的词库', sun:'Sun的词库', gift:'赠词词库'}[c]; }
 
-  $('#btnDeleteItem').addEventListener('click', () => {
-    deleteItem($('#btnDeleteItem').dataset.id);
+  document.getElementById('closeDetailBtn').addEventListener('click', () => {
+    document.getElementById('detailModal').style.display = 'none';
+  });
+  document.getElementById('detailModal').addEventListener('click', e => {
+    if (e.target === document.getElementById('detailModal')) document.getElementById('detailModal').style.display = 'none';
   });
 
-  document.addEventListener('keydown', (e) => {
-    if (e.key === 'Escape') {
-      closeModal();
-      $('#editOverlay').style.display = 'none';
+  // 复制
+  document.getElementById('copyBtn').addEventListener('click', () => {
+    const text = document.getElementById('detailPrompt').textContent;
+    navigator.clipboard.writeText(text).then(() => showToast('✅ 已复制'));
+  });
+
+  // 删除
+  document.getElementById('deleteBtn').addEventListener('click', async () => {
+    if (!isAdmin) return;
+    if (!confirm('确认删除？')) return;
+    await supabaseFetch(`?id=eq.${currentId}`, { method: 'DELETE' });
+    document.getElementById('detailModal').style.display = 'none';
+    loadItems();
+    showToast('已删除');
+  });
+
+  // 编辑
+  document.getElementById('editBtn').addEventListener('click', () => {
+    const item = items.find(i => i.id === currentId);
+    if (!item) return;
+    document.getElementById('editCategory').value = item.category;
+    document.getElementById('editPrompt').value = item.prompt;
+    document.getElementById('editModal').style.display = 'flex';
+  });
+  document.getElementById('saveEditBtn').addEventListener('click', async () => {
+    const newCat = document.getElementById('editCategory').value;
+    const newPrompt = document.getElementById('editPrompt').value.trim();
+    if (!newPrompt) return alert('提示词不能为空');
+    await supabaseFetch(`?id=eq.${currentId}`, {
+      method: 'PATCH',
+      body: JSON.stringify({ category: newCat, prompt: newPrompt })
+    });
+    document.getElementById('editModal').style.display = 'none';
+    loadItems();
+    // 更新详情弹窗
+    const item = items.find(i => i.id === currentId);
+    if (item) {
+      document.getElementById('detailNumber').innerHTML = `📌 编号 #${item.number} <span style="background:#f0e5d8;padding:2px 6px;border-radius:8px;font-size:0.7rem;">${getCatName(item.category)}</span>`;
+      document.getElementById('detailPrompt').textContent = item.prompt;
     }
+    showToast('✅ 修改已保存');
+  });
+  document.getElementById('cancelEditBtn').addEventListener('click', () => {
+    document.getElementById('editModal').style.display = 'none';
   });
 
-  function showToast(msg, success = true) {
+  function showToast(msg) {
     const t = document.createElement('div');
     t.className = 'toast';
     t.textContent = msg;
-    t.style.background = success ? '#f6ffed' : '#fff2f0';
-    t.style.borderColor = success ? '#b7eb8f' : '#ffccc7';
     document.body.appendChild(t);
-    setTimeout(() => t.remove(), 2300);
+    setTimeout(() => t.remove(), 2000);
   }
 
   // 启动
-  checkSession();
   loadItems();
 </script>
 </body>
