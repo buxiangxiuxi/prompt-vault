@@ -57,7 +57,26 @@
       cursor: pointer; background: #fefcf9; color: #8b7a6b; transition: 0.2s;
     }
     .file-upload-area:hover { border-color: #c49a6c; background: #fdf8f2; }
+    .file-upload-area.drag-over { border-color: #c49a6c; background: #f0e5d8; }
     .file-info { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
+    .preview-container {
+      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
+    }
+    .preview-item {
+      width: 70px; height: 70px; border-radius: 10px; overflow: hidden;
+      border: 1px solid #e8dfd3; background: #f0e9df; position: relative;
+      display: inline-block;
+    }
+    .preview-item img {
+      width: 100%; height: 100%; object-fit: cover;
+    }
+    .preview-item .remove-btn {
+      position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
+      background: rgba(201,107,107,0.9); color: white; border: none; border-radius: 50%;
+      font-size: 12px; line-height: 20px; text-align: center; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .preview-item .remove-btn:hover { background: #c96b6b; }
     .btn {
       padding: 11px 22px; border: none; border-radius: 14px; font-weight: 600;
       cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;
@@ -141,7 +160,7 @@
 
   <!-- 添加图片卡片 (仅管理员) -->
   <div class="card admin-only" id="addCard">
-    <div class="card-title">📥 存入新图片 (可批量)</div>
+    <div class="card-title">📥 存入新图片 (可批量，拖拽预览，可删除)</div>
     <div class="form-grid">
       <div class="form-row">
         <div class="form-group" style="flex:2;">
@@ -149,12 +168,13 @@
           <input type="url" id="imageUrl" placeholder="https://example.com/image.jpg">
         </div>
         <div class="form-group" style="flex:1;">
-          <label>📁 或批量上传文件</label>
+          <label>📁 或拖拽/批量上传</label>
           <div class="file-upload-area" id="fileUploadArea">
-            <span id="uploadText">点击选择多张图片</span>
+            <span id="uploadText">点击选择或拖拽图片到此处</span>
             <input type="file" id="fileInput" accept="image/*" multiple style="display:none;">
           </div>
           <div class="file-info" id="fileCountInfo"></div>
+          <div class="preview-container" id="previewContainer"></div>
         </div>
       </div>
       <div class="form-group">
@@ -214,7 +234,7 @@
   </div>
 </div>
 
-<!-- 编辑弹窗 (仅提示词和分类) -->
+<!-- 编辑弹窗 -->
 <div class="modal-overlay" id="editOverlay" style="display:none;">
   <div class="modal">
     <h3>✏️ 编辑信息</h3>
@@ -253,8 +273,11 @@
     let isAdmin = false;
     let currentCategory = 'rest';
 
+    // ---------- 待上传文件列表（数组管理，解决覆盖问题）----------
+    let pendingFiles = [];
+
     // ---------- IndexedDB ----------
-    const DB_NAME = 'SunRestWordVault2';
+    const DB_NAME = 'SunRestWordVault4';
     let db = null;
     function openDB() {
       return new Promise((resolve, reject) => {
@@ -362,6 +385,7 @@
     const fileInput = document.getElementById('fileInput');
     const uploadText = document.getElementById('uploadText');
     const fileCountInfo = document.getElementById('fileCountInfo');
+    const previewContainer = document.getElementById('previewContainer');
     const promptInput = document.getElementById('promptInput');
     const categorySelect = document.getElementById('categorySelect');
     const btnAdd = document.getElementById('btnAdd');
@@ -451,26 +475,100 @@
       if (e.target === loginOverlay) loginOverlay.style.display = 'none';
     });
 
-    // ---------- 数据加载 ----------
+    // ---------- 文件预览与删除功能 ----------
+    function renderPreview() {
+      previewContainer.innerHTML = '';
+      if (pendingFiles.length === 0) {
+        fileCountInfo.textContent = '';
+        uploadText.textContent = '点击选择或拖拽图片到此处';
+        return;
+      }
+      uploadText.textContent = `已选择 ${pendingFiles.length} 张图片`;
+      fileCountInfo.textContent = `共 ${pendingFiles.length} 个文件`;
+      pendingFiles.forEach((file, index) => {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          const div = document.createElement('div');
+          div.className = 'preview-item';
+          div.innerHTML = `
+            <img src="${e.target.result}" alt="预览">
+            <button class="remove-btn" data-index="${index}" title="移除这张图片">✕</button>
+          `;
+          previewContainer.appendChild(div);
+          // 绑定删除事件
+          div.querySelector('.remove-btn').addEventListener('click', (ev) => {
+            ev.stopPropagation();
+            const idx = parseInt(ev.target.dataset.index);
+            pendingFiles.splice(idx, 1);
+            renderPreview();
+          });
+        };
+        reader.readAsDataURL(file);
+      });
+    }
+
+    function addFiles(fileList) {
+      for (let i = 0; i < fileList.length; i++) {
+        pendingFiles.push(fileList[i]);
+      }
+      renderPreview();
+      imageUrl.value = ''; // 清除URL
+    }
+
+    // 文件选择事件
+    fileInput.addEventListener('change', () => {
+      if (fileInput.files.length > 0) {
+        addFiles(fileInput.files);
+        fileInput.value = ''; // 清空以便重新选择相同文件
+      }
+    });
+
+    // URL输入时清除文件预览
+    imageUrl.addEventListener('input', () => {
+      if (imageUrl.value.trim()) {
+        pendingFiles = [];
+        renderPreview();
+        fileInput.value = '';
+      }
+    });
+
+    // 拖拽上传区域事件
+    const uploadArea = document.getElementById('fileUploadArea');
+    uploadArea.addEventListener('click', () => fileInput.click());
+    uploadArea.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      uploadArea.classList.add('drag-over');
+    });
+    uploadArea.addEventListener('dragleave', () => {
+      uploadArea.classList.remove('drag-over');
+    });
+    uploadArea.addEventListener('drop', (e) => {
+      e.preventDefault();
+      uploadArea.classList.remove('drag-over');
+      const dt = e.dataTransfer;
+      if (dt.files.length > 0) {
+        addFiles(dt.files);
+      }
+    });
+
+    // ---------- 数据操作 ----------
     async function loadItems() {
       try { items = await getAllItems(); items.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; }
     }
 
-    // 获取指定分类的最大编号
     function getMaxNumber(category) {
       const catItems = items.filter(item => item.category === category);
       if (catItems.length === 0) return 0;
       return Math.max(...catItems.map(item => item.number || 0));
     }
 
-    // 获取当前分类过滤后的图片
     function getFilteredItems() {
       const term = searchInput.value.trim().toLowerCase();
       return items.filter(item => {
         if (item.category !== currentCategory) return false;
         if (!term) return true;
         return item.prompt.toLowerCase().includes(term);
-      }).sort((a, b) => (a.number || 0) - (b.number || 0)); // 按编号排序
+      }).sort((a, b) => (a.number || 0) - (b.number || 0));
     }
 
     async function addItemHandler() {
@@ -479,18 +577,15 @@
       if (!prompt) { showToast('请输入提示词', false); return; }
       const category = categorySelect.value;
       const urlValue = imageUrl.value.trim();
-      const files = fileInput.files;
 
-      if (!urlValue && (!files || files.length === 0)) {
+      if (!urlValue && pendingFiles.length === 0) {
         showToast('请提供图片URL或选择文件', false); return;
       }
 
-      // 计算新编号起始值
       const maxNum = getMaxNumber(category);
       let nextNumber = maxNum + 1;
 
       try {
-        // 处理URL单张
         if (urlValue) {
           if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) {
             showToast('URL格式不正确', false); return;
@@ -507,12 +602,10 @@
           nextNumber++;
         }
 
-        // 处理批量文件
-        if (files && files.length > 0) {
-          showToast(`正在压缩并保存 ${files.length} 张图片...`);
-          for (let i = 0; i < files.length; i++) {
-            const file = files[i];
-            const compressed = await compressImage(file);
+        if (pendingFiles.length > 0) {
+          showToast(`正在压缩并保存 ${pendingFiles.length} 张图片...`);
+          for (let i = 0; i < pendingFiles.length; i++) {
+            const compressed = await compressImage(pendingFiles[i]);
             const newItem = {
               id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6) + i,
               number: nextNumber,
@@ -528,16 +621,15 @@
 
         await loadItems();
         renderGrid();
-        // 清空表单
+        // 清空表单和预览
         imageUrl.value = '';
-        fileInput.value = '';
-        uploadText.textContent = '点击选择多张图片';
-        fileCountInfo.textContent = '';
+        pendingFiles = [];
+        renderPreview();
         promptInput.value = '';
         showToast('✅ 保存成功！');
       } catch (err) {
         let msg = '保存失败';
-        if (err.name === 'QuotaExceededError') msg = '存储空间已满，请删除一些图片';
+        if (err.name === 'QuotaExceededError') msg = '存储空间已满';
         else if (err.message) msg = err.message;
         showToast('❌ ' + msg, false);
       }
@@ -547,7 +639,7 @@
       if (!isAdmin) { showToast('只有管理员可以删除', false); return; }
       const item = items.find(i => i.id === id);
       if (!item) return;
-      const userInput = prompt(`⚠️ 请输入“确认删除”来删除编号 ${item.number} 的图片：`);
+      const userInput = prompt(`⚠️ 请输入"确认删除"来删除编号 ${item.number} 的图片：`);
       if (userInput !== '确认删除') { showToast('取消删除', false); return; }
       await deleteItem(id);
       await loadItems();
@@ -647,26 +739,6 @@
       }
     }
 
-    // 文件选择 UI 更新
-    fileInput.addEventListener('change', () => {
-      const count = fileInput.files.length;
-      if (count > 0) {
-        uploadText.textContent = `已选择 ${count} 张图片`;
-        fileCountInfo.textContent = `共 ${count} 个文件`;
-        imageUrl.value = ''; // 清除URL
-      } else {
-        uploadText.textContent = '点击选择多张图片';
-        fileCountInfo.textContent = '';
-      }
-    });
-    imageUrl.addEventListener('input', () => {
-      if (imageUrl.value.trim()) {
-        fileInput.value = '';
-        uploadText.textContent = '点击选择多张图片';
-        fileCountInfo.textContent = '';
-      }
-    });
-
     // 事件绑定
     btnAdd.addEventListener('click', addItemHandler);
     searchInput.addEventListener('input', renderGrid);
@@ -679,19 +751,6 @@
     modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
     editOverlay.addEventListener('click', (e) => { if(e.target === editOverlay) editOverlay.style.display='none'; });
     document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { closeModal(); editOverlay.style.display='none'; } });
-
-    const uploadArea = document.getElementById('fileUploadArea');
-    uploadArea.addEventListener('click', () => fileInput.click());
-    uploadArea.addEventListener('dragover', (e) => e.preventDefault());
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      if (e.dataTransfer.files.length > 0) {
-        fileInput.files = e.dataTransfer.files;
-        const event = new Event('change');
-        fileInput.dispatchEvent(event);
-        imageUrl.value = '';
-      }
-    });
 
     btnExport.addEventListener('click', exportData);
     btnImport.addEventListener('click', () => importFile.click());
