@@ -6,98 +6,79 @@
   <title>Sun和休息の词会 · 第一期</title>
   <style>
     :root {
-      --bg: #faf8f5;
-      --card-bg: #ffffff;
-      --card-border: #e8dfd3;
-      --text: #4a3f35;
-      --text-secondary: #8b7a6b;
-      --accent: #c49a6c;
-      --accent-hover: #b88655;
-      --accent-soft: #f0e5d8;
-      --danger: #c96b6b;
-      --success: #7a9a7e;
-      --input-bg: #fefcf9;
-      --input-border: #dbd0c0;
-      --radius: 20px;
-      --radius-sm: 14px;
-      --transition: 0.2s ease;
+      --bg: #faf8f5; --card-bg: #ffffff; --card-border: #e8dfd3;
+      --text: #4a3f35; --text-secondary: #8b7a6b; --accent: #c49a6c;
+      --accent-hover: #b88655; --input-bg: #fefcf9; --input-border: #dbd0c0;
+      --radius: 20px; --radius-sm: 14px;
     }
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body {
-      font-family: 'Inter', 'PingFang SC', 'Microsoft YaHei', sans-serif;
-      background: #faf8f5;
-      color: var(--text);
-      min-height: 100vh;
-      padding: 24px 16px;
-      display: flex;
-      justify-content: center;
+      font-family: 'PingFang SC', 'Microsoft YaHei', sans-serif;
+      background: #faf8f5; color: var(--text);
+      min-height: 100vh; padding: 24px 16px;
+      display: flex; justify-content: center;
     }
     .app-container { width: 100%; max-width: 1000px; display: flex; flex-direction: column; gap: 24px; }
-    .header { text-align: center; position: relative; }
-    .header .icon { font-size: 48px; }
-    .header h1 { font-size: 2rem; color: #4a3a2e; margin-top: 8px; }
+    .header { text-align: center; }
+    .header h1 { font-size: 2rem; color: #4a3a2e; margin: 8px 0; }
     .admin-bar { text-align: right; margin-bottom: 8px; }
     .card {
-      background: #fff; border: 1px solid #e8dfd3; border-radius: 20px; padding: 24px;
-      box-shadow: 0 4px 20px rgba(0,0,0,0.03);
+      background: #fff; border: 1px solid var(--card-border); border-radius: var(--radius);
+      padding: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.03);
     }
-    .card-title { font-size: 1.1rem; font-weight: 600; margin-bottom: 18px; color: #5c4a3a; }
+    .card h3 { font-size: 1.1rem; margin-bottom: 18px; color: #5c4a3a; }
     .form-grid { display: flex; flex-direction: column; gap: 14px; }
     .form-row { display: flex; gap: 12px; flex-wrap: wrap; }
     .form-group { flex: 1; min-width: 200px; }
     label { font-size: 0.85rem; font-weight: 500; color: #8b7a6b; display: block; margin-bottom: 5px; }
     input, textarea, select {
-      width: 100%; padding: 12px 16px; background: #fefcf9; border: 1.5px solid #dbd0c0;
-      border-radius: 14px; font-size: 0.95rem; font-family: inherit; outline: none;
+      width: 100%; padding: 12px 16px; background: var(--input-bg);
+      border: 1.5px solid var(--input-border); border-radius: var(--radius-sm);
+      font-size: 0.95rem; font-family: inherit; outline: none;
     }
-    input:focus, textarea:focus, select:focus { border-color: #c49a6c; box-shadow: 0 0 0 3px rgba(196,154,108,0.15); }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(196,154,108,0.15);
+    }
     textarea { min-height: 70px; resize: vertical; }
     .file-upload-area {
-      border: 2px dashed #dbd0c0; border-radius: 14px; padding: 16px; text-align: center;
-      cursor: pointer; background: #fefcf9; color: #8b7a6b; transition: 0.2s;
+      border: 2px dashed #dbd0c0; border-radius: var(--radius-sm); padding: 16px;
+      text-align: center; cursor: pointer; background: #fefcf9; color: #8b7a6b;
     }
-    .file-upload-area:hover { border-color: #c49a6c; background: #fdf8f2; }
-    .file-upload-area.drag-over { border-color: #c49a6c; background: #f0e5d8; }
-    .file-info { font-size: 0.8rem; color: var(--text-secondary); margin-top: 4px; }
-    .preview-container {
-      display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;
-    }
+    .file-upload-area:hover { border-color: var(--accent); background: #fdf8f2; }
+    .file-upload-area.drag-over { border-color: var(--accent); background: #f0e5d8; }
+    .file-info { font-size: 0.8rem; color: #8b7a6b; margin-top: 4px; }
+    .preview-container { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px; }
     .preview-item {
       width: 70px; height: 70px; border-radius: 10px; overflow: hidden;
-      border: 1px solid #e8dfd3; background: #f0e9df; position: relative;
-      display: inline-block;
+      border: 1px solid #e8dfd3; position: relative;
     }
-    .preview-item img {
-      width: 100%; height: 100%; object-fit: cover;
-    }
+    .preview-item img { width: 100%; height: 100%; object-fit: cover; }
     .preview-item .remove-btn {
       position: absolute; top: 2px; right: 2px; width: 20px; height: 20px;
       background: rgba(201,107,107,0.9); color: white; border: none; border-radius: 50%;
       font-size: 12px; line-height: 20px; text-align: center; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
     }
-    .preview-item .remove-btn:hover { background: #c96b6b; }
     .btn {
-      padding: 11px 22px; border: none; border-radius: 14px; font-weight: 600;
-      cursor: pointer; font-size: 0.9rem; display: inline-flex; align-items: center; gap: 6px;
-      justify-content: center;
+      padding: 11px 22px; border: none; border-radius: var(--radius-sm);
+      font-weight: 600; cursor: pointer; font-size: 0.9rem; display: inline-flex;
+      align-items: center; gap: 6px; justify-content: center;
     }
-    .btn-primary { background: #c49a6c; color: white; width: 100%; }
-    .btn-primary:hover { background: #b88655; }
+    .btn-primary { background: var(--accent); color: white; width: 100%; }
+    .btn-primary:hover { background: var(--accent-hover); }
     .btn-outline { background: transparent; border: 1.5px solid #dbd0c0; color: #4a3f35; }
     .btn-outline:hover { background: #f0e5d8; }
-    .btn-danger { background: transparent; border: 1.5px solid rgba(201,107,107,0.3); color: #c96b6b; }
+    .btn-danger { border: 1.5px solid rgba(201,107,107,0.3); color: #c96b6b; }
     .search-wrapper { position: relative; margin-bottom: 16px; }
     .search-wrapper input { padding-right: 44px; }
     .search-icon { position: absolute; right: 14px; top: 50%; transform: translateY(-50%); opacity: 0.5; }
-    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; flex-wrap: wrap; }
+    .items-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
     .items-count { background: #f0e5d8; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; }
     .tabs { display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap; }
     .tab-btn {
-      padding: 10px 20px; border-radius: 14px; border: 1.5px solid #dbd0c0; background: transparent;
-      color: #4a3f35; font-weight: 500; cursor: pointer; transition: 0.2s; font-size: 0.9rem;
+      padding: 10px 20px; border-radius: 14px; border: 1.5px solid #dbd0c0;
+      background: transparent; color: #4a3f35; cursor: pointer; font-weight: 500;
     }
-    .tab-btn.active { background: #c49a6c; color: white; border-color: #c49a6c; }
+    .tab-btn.active { background: var(--accent); color: white; border-color: var(--accent); }
     .image-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 16px; }
     .image-card {
       background: #fff; border-radius: 14px; overflow: hidden; border: 1px solid #e8dfd3;
@@ -107,20 +88,19 @@
     .img-wrapper { width: 100%; aspect-ratio: 1/1; background: #f0e9df; display: flex; align-items: center; justify-content: center; position: relative; }
     .img-wrapper img { width: 100%; height: 100%; object-fit: contain; }
     .img-number {
-      position: absolute; top: 6px; left: 6px; background: rgba(196,154,108,0.9); color: white;
-      font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
+      position: absolute; top: 6px; left: 6px; background: rgba(196,154,108,0.9);
+      color: white; font-size: 0.75rem; font-weight: 700; padding: 2px 8px; border-radius: 10px;
     }
     .card-info { padding: 10px; font-size: 0.8rem; color: #7a6a5c; }
     .card-prompt { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
     .no-items { grid-column: 1/-1; text-align: center; padding: 40px; color: #8b7a6b; }
-
     .modal-overlay {
       position: fixed; inset: 0; background: rgba(0,0,0,0.3); backdrop-filter: blur(6px);
       display: flex; align-items: center; justify-content: center; z-index: 100;
     }
     .modal {
-      background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 500px;
-      max-height: 90vh; overflow-y: auto;
+      background: white; border-radius: 20px; padding: 28px; width: 90%;
+      max-width: 500px; max-height: 90vh; overflow-y: auto;
     }
     .modal img { width: 100%; max-height: 300px; object-fit: contain; border-radius: 12px; margin-bottom: 16px; }
     .prompt-box {
@@ -134,14 +114,8 @@
       z-index: 200; animation: toast 2.3s forwards;
     }
     @keyframes toast { 0%{opacity:0;transform:translateX(-50%) translateY(20px);} 10%{opacity:1;transform:translateX(-50%) translateY(0);} 90%{opacity:1;} 100%{opacity:0;} }
-    .backup-row { display: flex; gap: 8px; margin-bottom: 12px; flex-wrap: wrap; }
-    /* 管理员按钮默认隐藏 */
     .admin-only { display: none; }
-    /* 当body有admin-mode类时，全局显示管理员按钮 */
     body.admin-mode .admin-only { display: flex; }
-    .login-modal {
-      background: white; border-radius: 20px; padding: 28px; width: 90%; max-width: 360px; text-align: center;
-    }
     .category-badge {
       display: inline-block; background: #f0e5d8; padding: 2px 8px; border-radius: 10px;
       font-size: 0.7rem; margin-left: 6px; vertical-align: middle;
@@ -149,7 +123,7 @@
   </style>
 </head>
 <body>
-<div id="appScreen" class="app-container">
+<div class="app-container">
   <div class="header">
     <div class="admin-bar">
       <button class="btn btn-outline btn-sm" id="adminLoginBtn">🔒 管理员登录</button>
@@ -157,12 +131,12 @@
     </div>
     <span class="icon">🌸</span>
     <h1>Sun和休息の词会 · 第一期</h1>
-    <p style="color:#8b7a6b;" id="modeHint">访客模式 · 仅浏览</p>
+    <p id="modeHint">访客模式 · 实时同步</p>
   </div>
 
-  <!-- 添加图片卡片 (仅管理员) -->
+  <!-- 添加图片卡片 (仅管理员可见) -->
   <div class="card admin-only" id="addCard">
-    <div class="card-title">📥 存入新图片 (可批量，拖拽预览，可删除)</div>
+    <h3>📥 存入新图片 (可批量拖拽，可删除预览)</h3>
     <div class="form-grid">
       <div class="form-row">
         <div class="form-group" style="flex:2;">
@@ -191,29 +165,24 @@
         <label>💬 提示词 (所有选中图片将共用此提示词)</label>
         <textarea id="promptInput" placeholder="输入这批图片的提示词..."></textarea>
       </div>
-      <button class="btn btn-primary" id="btnAdd">✨ 存入图片与提示词</button>
+      <button class="btn btn-primary" id="btnAdd">✨ 存入云端</button>
     </div>
   </div>
 
   <!-- 图片库卡片 -->
   <div class="card">
-    <div class="card-title">🌸 词库浏览</div>
+    <h3>🌸 词库浏览</h3>
     <div class="tabs" id="categoryTabs">
       <button class="tab-btn active" data-cat="rest">🛋️ 休息的词库</button>
       <button class="tab-btn" data-cat="sun">☀️ Sun的词库</button>
       <button class="tab-btn" data-cat="gift">🎁 赠词词库</button>
-    </div>
-    <div class="backup-row">
-      <button class="btn btn-outline btn-sm" id="btnImport">📥 导入备份</button>
-      <button class="btn btn-outline btn-sm admin-only" id="btnExport">📤 导出备份</button>
-      <input type="file" id="importFile" accept=".json" style="display:none;">
     </div>
     <div class="search-wrapper">
       <input type="text" id="searchInput" placeholder="搜索当前词库的提示词...">
       <span class="search-icon">🔍</span>
     </div>
     <div class="items-header">
-      <span class="items-count" id="itemsCount">共 0 张图片</span>
+      <span class="items-count" id="itemsCount">加载中...</span>
     </div>
     <div class="image-grid" id="imageGrid"></div>
   </div>
@@ -224,7 +193,7 @@
   <div class="modal">
     <img id="modalImage" src="" style="display:none;">
     <div id="modalPlaceholder" style="width:100%;height:200px;background:#f0e9df;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:48px;">🖼️</div>
-    <h3 id="modalNumberDisplay" style="margin-bottom:4px;"></h3>
+    <h3 id="modalNumberDisplay"></h3>
     <div class="prompt-box" id="modalPrompt"></div>
     <div class="btn-row">
       <button class="btn btn-primary" id="btnCopyPrompt">📋 复制提示词</button>
@@ -232,7 +201,7 @@
       <button class="btn btn-outline" id="btnModalClose">关闭</button>
       <button class="btn btn-danger btn-sm admin-only" id="btnDeleteItem">🗑️ 删除</button>
     </div>
-    <span id="copyFeedback" style="color:#7a9a7e;font-size:0.8rem;"></span>
+    <span id="copyFeedback" style="color:#7a9a7e; font-size:0.8rem;"></span>
   </div>
 </div>
 
@@ -259,520 +228,393 @@
   </div>
 </div>
 
-<!-- 管理员登录弹窗 -->
-<div class="modal-overlay" id="loginOverlay" style="display:none;">
-  <div class="login-modal">
-    <h3>🔐 管理员登录</h3>
-    <input type="password" id="adminPassword" placeholder="输入管理密码" style="width:100%; margin:16px 0; text-align:center;">
-    <button class="btn btn-primary" id="confirmLogin">确认</button>
-    <p id="loginError" style="color:#c96b6b; font-size:0.85rem; margin-top:8px; display:none;">密码错误</p>
-  </div>
-</div>
+<script type="module">
+  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
 
-<script>
-  (() => {
-    const ADMIN_PASSWORD = '5201314';
-    let isAdmin = false;
-    let currentCategory = 'rest';
-    let pendingFiles = []; // 待上传文件数组
+  // ✅ 已填入您的 Supabase 信息
+  const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
+  const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
+  const ADMIN_PASSWORD = '5201314';
 
-    // ---------- IndexedDB ----------
-    const DB_NAME = 'SunRestWordVault5';
-    let db = null;
-    function openDB() {
-      return new Promise((resolve, reject) => {
-        const request = indexedDB.open(DB_NAME, 1);
-        request.onupgradeneeded = (e) => {
-          const db = e.target.result;
-          if (!db.objectStoreNames.contains('images')) {
-            db.createObjectStore('images', { keyPath: 'id' });
-          }
-        };
-        request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-        request.onerror = (e) => reject(e.target.error);
-      });
+  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+  let isAdmin = false;
+  let currentCategory = 'rest';
+  let pendingFiles = [];
+  let allItems = [];
+
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => document.querySelectorAll(sel);
+
+  function updateAdminUI() {
+    if (isAdmin) {
+      document.body.classList.add('admin-mode');
+      $('#modeHint').textContent = '管理员模式 · 云端同步';
+      $('#adminLoginBtn').style.display = 'none';
+      $('#adminLogoutBtn').style.display = 'inline-flex';
+    } else {
+      document.body.classList.remove('admin-mode');
+      $('#modeHint').textContent = '访客模式 · 实时同步';
+      $('#adminLoginBtn').style.display = 'inline-flex';
+      $('#adminLogoutBtn').style.display = 'none';
+      $('#editOverlay').style.display = 'none';
     }
-    async function getDB() { if (db) return db; return await openDB(); }
-    async function addItem(item) {
-      const database = await getDB();
-      return new Promise((resolve, reject) => {
-        const tx = database.transaction('images', 'readwrite');
-        const store = tx.objectStore('images');
-        const req = store.add(item);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-      });
-    }
-    async function getAllItems() {
-      const database = await getDB();
-      return new Promise((resolve, reject) => {
-        const tx = database.transaction('images', 'readonly');
-        const store = tx.objectStore('images');
-        const req = store.getAll();
-        req.onsuccess = () => resolve(req.result || []);
-        req.onerror = () => reject(req.error);
-      });
-    }
-    async function updateItem(item) {
-      const database = await getDB();
-      return new Promise((resolve, reject) => {
-        const tx = database.transaction('images', 'readwrite');
-        const store = tx.objectStore('images');
-        const req = store.put(item);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-      });
-    }
-    async function deleteItem(id) {
-      const database = await getDB();
-      return new Promise((resolve, reject) => {
-        const tx = database.transaction('images', 'readwrite');
-        const store = tx.objectStore('images');
-        const req = store.delete(id);
-        req.onsuccess = () => resolve();
-        req.onerror = () => reject(req.error);
-      });
-    }
+  }
 
-    function compressImage(file, maxWidth = 800, quality = 0.7) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const img = new Image();
-          img.onload = () => {
-            const canvas = document.createElement('canvas');
-            let width = img.width, height = img.height;
-            if (width > maxWidth) { height = Math.round((height * maxWidth) / width); width = maxWidth; }
-            canvas.width = width; canvas.height = height;
-            const ctx = canvas.getContext('2d');
-            ctx.drawImage(img, 0, 0, width, height);
-            resolve(canvas.toDataURL('image/jpeg', quality));
-          };
-          img.onerror = reject;
-          img.src = e.target.result;
-        };
-        reader.onerror = reject;
-        reader.readAsDataURL(file);
-      });
+  // 管理员登录/退出
+  $('#adminLoginBtn').addEventListener('click', () => {
+    const pwd = prompt('请输入管理员密码：');
+    if (pwd === ADMIN_PASSWORD) {
+      isAdmin = true;
+      updateAdminUI();
+      showToast('已切换为管理员模式');
+    } else {
+      alert('密码错误');
     }
+  });
+  $('#adminLogoutBtn').addEventListener('click', () => {
+    isAdmin = false;
+    updateAdminUI();
+    showToast('已退出管理');
+  });
 
-    function showToast(msg, isSuccess = true) {
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = msg;
-      toast.style.background = isSuccess ? '#f6ffed' : '#fff2f0';
-      toast.style.borderColor = isSuccess ? '#b7eb8f' : '#ffccc7';
-      document.body.appendChild(toast);
-      setTimeout(() => toast.remove(), 2300);
+  // 从云端加载所有图片
+  async function loadItems() {
+    const { data, error } = await supabase
+      .from('images')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      console.error('加载失败:', error);
+      allItems = [];
+    } else {
+      allItems = data || [];
     }
+    renderGrid();
+  }
 
-    function escapeHtml(str) {
-      const div = document.createElement('div');
-      div.textContent = str;
-      return div.innerHTML;
+  function getFilteredItems() {
+    const term = $('#searchInput').value.trim().toLowerCase();
+    return allItems.filter(item => {
+      if (item.category !== currentCategory) return false;
+      if (!term) return true;
+      return item.prompt.toLowerCase().includes(term);
+    }).sort((a, b) => a.number - b.number);
+  }
+
+  function renderGrid() {
+    const filtered = getFilteredItems();
+    const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
+    $('#itemsCount').textContent = `${catNames[currentCategory]} · 共 ${filtered.length} 张`;
+    const grid = $('#imageGrid');
+    if (filtered.length === 0) {
+      grid.innerHTML = `<div class="no-items">🌸<br>暂无图片</div>`;
+      return;
     }
+    grid.innerHTML = filtered.map(item => `
+      <div class="image-card" data-id="${item.id}">
+        <div class="img-wrapper">
+          <img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">
+          <span class="img-number">#${item.number}</span>
+        </div>
+        <div class="card-info">
+          <div class="card-prompt">${escapeHtml(item.prompt.substring(0, 30))}</div>
+        </div>
+      </div>`).join('');
+    $$('.image-card').forEach(card => {
+      card.addEventListener('click', () => openModal(card.dataset.id));
+    });
+  }
 
-    // ---------- 全局状态 ----------
-    let items = [];
-    let currentItemId = null;
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
 
-    // DOM 元素
-    const adminLoginBtn = document.getElementById('adminLoginBtn');
-    const adminLogoutBtn = document.getElementById('adminLogoutBtn');
-    const modeHint = document.getElementById('modeHint');
-    const imageUrl = document.getElementById('imageUrl');
-    const fileInput = document.getElementById('fileInput');
-    const uploadText = document.getElementById('uploadText');
-    const fileCountInfo = document.getElementById('fileCountInfo');
-    const previewContainer = document.getElementById('previewContainer');
-    const promptInput = document.getElementById('promptInput');
-    const categorySelect = document.getElementById('categorySelect');
-    const btnAdd = document.getElementById('btnAdd');
-    const searchInput = document.getElementById('searchInput');
-    const imageGrid = document.getElementById('imageGrid');
-    const itemsCount = document.getElementById('itemsCount');
-    const categoryTabs = document.getElementById('categoryTabs');
-    const modalOverlay = document.getElementById('modalOverlay');
-    const modalImage = document.getElementById('modalImage');
-    const modalPlaceholder = document.getElementById('modalPlaceholder');
-    const modalNumberDisplay = document.getElementById('modalNumberDisplay');
-    const modalPrompt = document.getElementById('modalPrompt');
-    const btnCopyPrompt = document.getElementById('btnCopyPrompt');
-    const btnEdit = document.getElementById('btnEdit');
-    const btnModalClose = document.getElementById('btnModalClose');
-    const btnDeleteItem = document.getElementById('btnDeleteItem');
-    const copyFeedback = document.getElementById('copyFeedback');
-    const editOverlay = document.getElementById('editOverlay');
-    const editCategory = document.getElementById('editCategory');
-    const editPrompt = document.getElementById('editPrompt');
-    const btnSaveEdit = document.getElementById('btnSaveEdit');
-    const btnCancelEdit = document.getElementById('btnCancelEdit');
-    const btnExport = document.getElementById('btnExport');
-    const btnImport = document.getElementById('btnImport');
-    const importFile = document.getElementById('importFile');
-    const loginOverlay = document.getElementById('loginOverlay');
-    const adminPassword = document.getElementById('adminPassword');
-    const confirmLogin = document.getElementById('confirmLogin');
-    const loginError = document.getElementById('loginError');
-
-    const categoryNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
-
-    // 切换管理员模式：给body添加/移除admin-mode类
-    function updateUIMode() {
-      if (isAdmin) {
-        document.body.classList.add('admin-mode');
-        modeHint.textContent = '管理员模式 · 可编辑';
-        adminLoginBtn.style.display = 'none';
-        adminLogoutBtn.style.display = 'inline-flex';
-      } else {
-        document.body.classList.remove('admin-mode');
-        modeHint.textContent = '访客模式 · 仅浏览';
-        adminLoginBtn.style.display = 'inline-flex';
-        adminLogoutBtn.style.display = 'none';
-        // 关闭编辑弹窗
-        editOverlay.style.display = 'none';
-      }
+  // 选项卡切换
+  $('#categoryTabs').addEventListener('click', (e) => {
+    if (e.target.classList.contains('tab-btn')) {
+      currentCategory = e.target.dataset.cat;
+      $$('.tab-btn').forEach(b => b.classList.remove('active'));
+      e.target.classList.add('active');
+      $('#searchInput').value = '';
       renderGrid();
     }
+  });
 
-    // 选项卡切换
-    categoryTabs.addEventListener('click', (e) => {
-      const btn = e.target.closest('.tab-btn');
-      if (!btn) return;
-      currentCategory = btn.dataset.cat;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      searchInput.value = '';
-      renderGrid();
-    });
+  $('#searchInput').addEventListener('input', renderGrid);
 
-    // 管理员登录
-    adminLoginBtn.addEventListener('click', () => {
-      loginOverlay.style.display = 'flex';
-      adminPassword.value = '';
-      loginError.style.display = 'none';
-      adminPassword.focus();
+  // ---------- 文件预览功能 ----------
+  function updatePreview() {
+    const container = $('#previewContainer');
+    container.innerHTML = '';
+    if (pendingFiles.length === 0) {
+      $('#fileCountInfo').textContent = '';
+      $('#uploadText').textContent = '点击选择或拖拽图片到此处';
+      return;
+    }
+    $('#uploadText').textContent = `已选择 ${pendingFiles.length} 张图片`;
+    $('#fileCountInfo').textContent = `共 ${pendingFiles.length} 个文件`;
+    pendingFiles.forEach((file, index) => {
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const div = document.createElement('div');
+        div.className = 'preview-item';
+        div.innerHTML = `
+          <img src="${e.target.result}" alt="预览">
+          <button class="remove-btn" data-index="${index}">✕</button>
+        `;
+        container.appendChild(div);
+        div.querySelector('.remove-btn').addEventListener('click', (ev) => {
+          ev.stopPropagation();
+          pendingFiles.splice(index, 1);
+          updatePreview();
+        });
+      };
+      reader.readAsDataURL(file);
     });
-    confirmLogin.addEventListener('click', () => {
-      if (adminPassword.value === ADMIN_PASSWORD) {
-        isAdmin = true;
-        loginOverlay.style.display = 'none';
-        updateUIMode();
-        showToast('🔓 已切换为管理员模式');
-      } else {
-        loginError.style.display = 'block';
-        adminPassword.value = '';
-      }
-    });
-    adminPassword.addEventListener('keydown', (e) => {
-      if (e.key === 'Enter') confirmLogin.click();
-    });
-    adminLogoutBtn.addEventListener('click', () => {
-      isAdmin = false;
-      updateUIMode();
-      showToast('🔒 已退出管理，恢复访客模式');
-    });
-    loginOverlay.addEventListener('click', (e) => {
-      if (e.target === loginOverlay) loginOverlay.style.display = 'none';
-    });
+  }
 
-    // ---------- 文件预览与删除功能 ----------
-    function renderPreview() {
-      previewContainer.innerHTML = '';
-      if (pendingFiles.length === 0) {
-        fileCountInfo.textContent = '';
-        uploadText.textContent = '点击选择或拖拽图片到此处';
-        return;
-      }
-      uploadText.textContent = `已选择 ${pendingFiles.length} 张图片`;
-      fileCountInfo.textContent = `共 ${pendingFiles.length} 个文件`;
-      pendingFiles.forEach((file, index) => {
-        const reader = new FileReader();
-        reader.onload = (e) => {
-          const div = document.createElement('div');
-          div.className = 'preview-item';
-          div.innerHTML = `
-            <img src="${e.target.result}" alt="预览">
-            <button class="remove-btn" data-index="${index}" title="移除这张图片">✕</button>
-          `;
-          previewContainer.appendChild(div);
-          // 绑定删除事件
-          div.querySelector('.remove-btn').addEventListener('click', (ev) => {
-            ev.stopPropagation();
-            const idx = parseInt(ev.target.dataset.index);
-            pendingFiles.splice(idx, 1);
-            renderPreview();
-          });
+  $('#fileInput').addEventListener('change', () => {
+    if ($('#fileInput').files.length > 0) {
+      for (let f of $('#fileInput').files) pendingFiles.push(f);
+      updatePreview();
+      $('#fileInput').value = '';
+      $('#imageUrl').value = '';
+    }
+  });
+
+  const uploadArea = $('#fileUploadArea');
+  uploadArea.addEventListener('click', () => $('#fileInput').click());
+  uploadArea.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    uploadArea.classList.add('drag-over');
+  });
+  uploadArea.addEventListener('dragleave', () => uploadArea.classList.remove('drag-over'));
+  uploadArea.addEventListener('drop', (e) => {
+    e.preventDefault();
+    uploadArea.classList.remove('drag-over');
+    if (e.dataTransfer.files.length > 0) {
+      for (let f of e.dataTransfer.files) pendingFiles.push(f);
+      updatePreview();
+      $('#imageUrl').value = '';
+    }
+  });
+
+  $('#imageUrl').addEventListener('input', () => {
+    if ($('#imageUrl').value.trim()) {
+      pendingFiles = [];
+      updatePreview();
+      $('#fileInput').value = '';
+    }
+  });
+
+  // 图片压缩
+  function compressImage(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        const img = new Image();
+        img.onload = () => {
+          const canvas = document.createElement('canvas');
+          let width = img.width, height = img.height;
+          const maxWidth = 800;
+          if (width > maxWidth) {
+            height *= maxWidth / width;
+            width = maxWidth;
+          }
+          canvas.width = width;
+          canvas.height = height;
+          canvas.getContext('2d').drawImage(img, 0, 0, width, height);
+          resolve(canvas.toDataURL('image/jpeg', 0.7));
         };
-        reader.readAsDataURL(file);
-      });
+        img.src = reader.result;
+      };
+      reader.readAsDataURL(file);
+    });
+  }
+
+  // 添加图片到云端
+  $('#btnAdd').addEventListener('click', async () => {
+    if (!isAdmin) return showToast('需要管理员权限', false);
+    const prompt = $('#promptInput').value.trim();
+    if (!prompt) return showToast('请输入提示词', false);
+    const category = $('#categorySelect').value;
+    const urlValue = $('#imageUrl').value.trim();
+    let imagesToUpload = [];
+
+    if (urlValue) {
+      if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) return showToast('URL格式不正确', false);
+      imagesToUpload.push(urlValue);
     }
 
-    function addFiles(fileList) {
-      for (let i = 0; i < fileList.length; i++) {
-        pendingFiles.push(fileList[i]);
+    if (pendingFiles.length > 0) {
+      showToast(`正在压缩 ${pendingFiles.length} 张图片...`);
+      for (let file of pendingFiles) {
+        const dataUrl = await compressImage(file);
+        imagesToUpload.push(dataUrl);
       }
-      renderPreview();
-      imageUrl.value = ''; // 清除URL
     }
 
-    // 文件选择事件
-    fileInput.addEventListener('change', () => {
-      if (fileInput.files.length > 0) {
-        addFiles(fileInput.files);
-        fileInput.value = ''; // 清空以便重新选择
-      }
+    if (!imagesToUpload.length) return showToast('请提供图片URL或选择文件', false);
+
+    // 获取当前分类最大编号
+    const { data: maxData } = await supabase
+      .from('images')
+      .select('number')
+      .eq('category', category)
+      .order('number', { ascending: false })
+      .limit(1);
+    let nextNum = (maxData?.[0]?.number || 0) + 1;
+
+    const rows = imagesToUpload.map((imgData, i) => ({
+      id: crypto.randomUUID ? crypto.randomUUID() : 'img_' + Date.now() + '_' + i,
+      number: nextNum + i,
+      category,
+      imageData: imgData,
+      prompt
+    }));
+
+    const { error } = await supabase.from('images').insert(rows, {
+      headers: { 'x-admin-password': ADMIN_PASSWORD }
     });
 
-    // URL输入时清除文件预览
-    imageUrl.addEventListener('input', () => {
-      if (imageUrl.value.trim()) {
-        pendingFiles = [];
-        renderPreview();
-        fileInput.value = '';
-      }
-    });
-
-    // 拖拽上传区域事件
-    const uploadArea = document.getElementById('fileUploadArea');
-    uploadArea.addEventListener('click', () => fileInput.click());
-    uploadArea.addEventListener('dragover', (e) => {
-      e.preventDefault();
-      uploadArea.classList.add('drag-over');
-    });
-    uploadArea.addEventListener('dragleave', () => {
-      uploadArea.classList.remove('drag-over');
-    });
-    uploadArea.addEventListener('drop', (e) => {
-      e.preventDefault();
-      uploadArea.classList.remove('drag-over');
-      const dt = e.dataTransfer;
-      if (dt.files.length > 0) {
-        addFiles(dt.files);
-      }
-    });
-
-    // ---------- 数据操作 ----------
-    async function loadItems() {
-      try { items = await getAllItems(); items.sort((a,b) => new Date(b.createdAt) - new Date(a.createdAt)); } catch (e) { items = []; }
+    if (error) {
+      showToast('保存失败：' + error.message, false);
+      return;
     }
 
-    function getMaxNumber(category) {
-      const catItems = items.filter(item => item.category === category);
-      if (catItems.length === 0) return 0;
-      return Math.max(...catItems.map(item => item.number || 0));
-    }
+    // 清空表单
+    $('#imageUrl').value = '';
+    $('#promptInput').value = '';
+    pendingFiles = [];
+    updatePreview();
+    loadItems();
+    showToast('✅ 已同步到云端！所有设备可见。');
+  });
 
-    function getFilteredItems() {
-      const term = searchInput.value.trim().toLowerCase();
-      return items.filter(item => {
-        if (item.category !== currentCategory) return false;
-        if (!term) return true;
-        return item.prompt.toLowerCase().includes(term);
-      }).sort((a, b) => (a.number || 0) - (b.number || 0));
-    }
-
-    async function addItemHandler() {
-      if (!isAdmin) { showToast('只有管理员可以添加图片', false); return; }
-      const prompt = promptInput.value.trim();
-      if (!prompt) { showToast('请输入提示词', false); return; }
-      const category = categorySelect.value;
-      const urlValue = imageUrl.value.trim();
-
-      if (!urlValue && pendingFiles.length === 0) {
-        showToast('请提供图片URL或选择文件', false); return;
-      }
-
-      const maxNum = getMaxNumber(category);
-      let nextNumber = maxNum + 1;
-
-      try {
-        if (urlValue) {
-          if (!urlValue.startsWith('http') && !urlValue.startsWith('data:')) {
-            showToast('URL格式不正确', false); return;
-          }
-          const newItem = {
-            id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6),
-            number: nextNumber,
-            category,
-            imageData: urlValue,
-            prompt,
-            createdAt: new Date().toISOString()
-          };
-          await addItem(newItem);
-          nextNumber++;
-        }
-
-        if (pendingFiles.length > 0) {
-          showToast(`正在压缩并保存 ${pendingFiles.length} 张图片（共享提示词）...`);
-          for (let i = 0; i < pendingFiles.length; i++) {
-            const compressed = await compressImage(pendingFiles[i]);
-            const newItem = {
-              id: 'img_' + Date.now() + '_' + Math.random().toString(36).slice(2,6) + i,
-              number: nextNumber,
-              category,
-              imageData: compressed,
-              prompt,
-              createdAt: new Date().toISOString()
-            };
-            await addItem(newItem);
-            nextNumber++;
-          }
-        }
-
-        await loadItems();
-        renderGrid();
-        // 清空表单和预览
-        imageUrl.value = '';
-        pendingFiles = [];
-        renderPreview();
-        promptInput.value = '';
-        showToast('✅ 保存成功！所有图片已共用提示词。');
-      } catch (err) {
-        let msg = '保存失败';
-        if (err.name === 'QuotaExceededError') msg = '存储空间已满';
-        else if (err.message) msg = err.message;
-        showToast('❌ ' + msg, false);
-      }
-    }
-
-    async function deleteItemHandler(id) {
-      if (!isAdmin) { showToast('只有管理员可以删除', false); return; }
-      const item = items.find(i => i.id === id);
-      if (!item) return;
-      const userInput = prompt(`⚠️ 请输入"确认删除"来删除编号 ${item.number} 的图片：`);
-      if (userInput !== '确认删除') { showToast('取消删除', false); return; }
-      await deleteItem(id);
-      await loadItems();
-      renderGrid();
+  // 删除图片
+  async function deleteItem(id) {
+    if (!isAdmin) return showToast('需要管理员权限', false);
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    const confirmText = prompt(`⚠️ 请输入"确认删除"来删除编号 #${item.number} 的图片：`);
+    if (confirmText !== '确认删除') return showToast('取消删除', false);
+    const { error } = await supabase.from('images').delete().eq('id', id).headers({
+      'x-admin-password': ADMIN_PASSWORD
+    });
+    if (error) showToast('删除失败', false);
+    else {
       closeModal();
+      loadItems();
       showToast('已删除');
     }
+  }
 
-    function renderGrid() {
-      const filtered = getFilteredItems();
-      itemsCount.textContent = `${categoryNames[currentCategory]} · 共 ${filtered.length} 张`;
-      if (filtered.length === 0) {
-        imageGrid.innerHTML = `<div class="no-items">🌸<br>暂无图片</div>`;
-        return;
-      }
-      imageGrid.innerHTML = filtered.map(item => `
-        <div class="image-card" data-id="${item.id}">
-          <div class="img-wrapper">
-            ${item.imageData ? `<img src="${escapeHtml(item.imageData)}" onerror="this.parentElement.innerHTML='<div style=\\'height:100%;display:flex;align-items:center;justify-content:center;\\'>🖼️</div>'">` : '<div style="height:100%;display:flex;align-items:center;justify-content:center;">🖼️</div>'}
-            <span class="img-number">#${item.number}</span>
-          </div>
-          <div class="card-info">
-            <div class="card-prompt">${escapeHtml(item.prompt.substring(0, 30))}</div>
-          </div>
-        </div>`).join('');
-      document.querySelectorAll('.image-card').forEach(card => card.addEventListener('click', () => openModal(card.dataset.id)));
-    }
+  function openModal(id) {
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    $('#modalImage').src = item.imageData;
+    $('#modalImage').style.display = 'block';
+    $('#modalPlaceholder').style.display = 'none';
+    const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
+    $('#modalNumberDisplay').innerHTML = `📌 编号 #${item.number} <span class="category-badge">${catNames[item.category]}</span>`;
+    $('#modalPrompt').textContent = item.prompt;
+    $('#modalOverlay').style.display = 'flex';
+    $('#btnDeleteItem').dataset.id = id;
+    $('#btnEdit').dataset.id = id;
+  }
 
-    function openModal(id) {
-      const item = items.find(i => i.id === id); if(!item) return;
-      currentItemId = id; copyFeedback.textContent = '';
-      if(item.imageData && (item.imageData.startsWith('data:') || item.imageData.startsWith('http'))) {
-        modalImage.src = item.imageData; modalImage.style.display='block'; modalPlaceholder.style.display='none';
-      } else { modalImage.style.display='none'; modalPlaceholder.style.display='flex'; }
-      modalNumberDisplay.innerHTML = `📌 编号 #${item.number} <span class="category-badge">${categoryNames[item.category]}</span>`;
-      modalPrompt.textContent = item.prompt;
-      modalOverlay.style.display='flex';
-    }
+  function closeModal() {
+    $('#modalOverlay').style.display = 'none';
+  }
 
-    function closeModal() { modalOverlay.style.display='none'; currentItemId = null; }
+  $('#btnModalClose').addEventListener('click', closeModal);
+  $('#modalOverlay').addEventListener('click', (e) => {
+    if (e.target === $('#modalOverlay')) closeModal();
+  });
 
-    async function copyPrompt() {
-      const text = modalPrompt.textContent;
-      if (!text) return;
+  // 复制提示词
+  $('#btnCopyPrompt').addEventListener('click', async () => {
+    const text = $('#modalPrompt').textContent;
+    if (!text) return;
+    try {
       if (navigator.clipboard && window.isSecureContext) {
-        try { await navigator.clipboard.writeText(text); copyFeedback.textContent = '✅ 已复制'; setTimeout(()=>copyFeedback.textContent='',2000); return; } catch(e){}
+        await navigator.clipboard.writeText(text);
+      } else {
+        const ta = document.createElement('textarea');
+        ta.value = text;
+        ta.style.position = 'fixed';
+        ta.style.opacity = '0';
+        document.body.appendChild(ta);
+        ta.select();
+        document.execCommand('copy');
+        document.body.removeChild(ta);
       }
-      const textarea = document.createElement('textarea');
-      textarea.value = text; textarea.style.position='fixed'; textarea.style.opacity='0';
-      document.body.appendChild(textarea); textarea.select();
-      try { const ok = document.execCommand('copy'); copyFeedback.textContent = ok ? '✅ 已复制' : '❌ 失败'; } catch(e) { copyFeedback.textContent = '❌ 失败'; }
-      document.body.removeChild(textarea);
-      setTimeout(()=>copyFeedback.textContent='',2000);
+      $('#copyFeedback').textContent = '✅ 已复制';
+    } catch (e) {
+      $('#copyFeedback').textContent = '❌ 复制失败';
     }
+    setTimeout(() => $('#copyFeedback').textContent = '', 2000);
+  });
 
-    function openEdit() {
-      if (!isAdmin) { showToast('只有管理员可以编辑', false); return; }
-      const item = items.find(i => i.id === currentItemId); if(!item) return;
-      editCategory.value = item.category;
-      editPrompt.value = item.prompt;
-      editOverlay.style.display = 'flex';
-    }
+  // 编辑
+  $('#btnEdit').addEventListener('click', () => {
+    if (!isAdmin) return;
+    const id = $('#btnEdit').dataset.id;
+    const item = allItems.find(i => i.id === id);
+    if (!item) return;
+    $('#editCategory').value = item.category;
+    $('#editPrompt').value = item.prompt;
+    $('#editOverlay').style.display = 'flex';
+    $('#btnSaveEdit').dataset.id = id;
+  });
 
-    async function saveEdit() {
-      const item = items.find(i => i.id === currentItemId); if(!item) return;
-      const newCategory = editCategory.value;
-      const newPrompt = editPrompt.value.trim();
-      if (!newPrompt) { showToast('提示词不能为空', false); return; }
-      item.category = newCategory;
-      item.prompt = newPrompt;
-      await updateItem(item);
-      await loadItems();
-      renderGrid();
-      // 更新详情弹窗显示
-      modalNumberDisplay.innerHTML = `📌 编号 #${item.number} <span class="category-badge">${categoryNames[item.category]}</span>`;
-      modalPrompt.textContent = item.prompt;
-      editOverlay.style.display = 'none';
+  $('#btnSaveEdit').addEventListener('click', async () => {
+    const id = $('#btnSaveEdit').dataset.id;
+    const newCat = $('#editCategory').value;
+    const newPrompt = $('#editPrompt').value.trim();
+    if (!newPrompt) return showToast('提示词不能为空', false);
+    const { error } = await supabase.from('images').update({
+      category: newCat,
+      prompt: newPrompt
+    }).eq('id', id).headers({ 'x-admin-password': ADMIN_PASSWORD });
+    if (error) showToast('修改失败', false);
+    else {
+      $('#editOverlay').style.display = 'none';
+      loadItems();
       showToast('✅ 修改已保存');
     }
+  });
 
-    async function exportData() {
-      const allItems = await getAllItems();
-      const blob = new Blob([JSON.stringify(allItems, null, 2)], {type: 'application/json'});
-      const url = URL.createObjectURL(blob);
-      const a = document.createElement('a');
-      a.href = url; a.download = `词会备份_${new Date().toISOString().slice(0,10)}.json`;
-      a.click(); URL.revokeObjectURL(url); showToast('📤 备份文件已下载');
+  $('#btnCancelEdit').addEventListener('click', () => $('#editOverlay').style.display = 'none');
+
+  $('#btnDeleteItem').addEventListener('click', () => {
+    deleteItem($('#btnDeleteItem').dataset.id);
+  });
+
+  // ESC 关闭弹窗
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeModal();
+      $('#editOverlay').style.display = 'none';
     }
+  });
 
-    async function importData(file) {
-      try {
-        const text = await file.text();
-        const data = JSON.parse(text);
-        if (!Array.isArray(data)) throw new Error('格式错误');
-        for (const item of data) { await addItem(item); }
-        await loadItems();
-        renderGrid();
-        showToast('📥 导入成功！');
-      } catch (e) {
-        showToast('❌ 导入失败，文件格式不正确', false);
-      }
-    }
+  function showToast(msg, success = true) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.textContent = msg;
+    t.style.background = success ? '#f6ffed' : '#fff2f0';
+    t.style.borderColor = success ? '#b7eb8f' : '#ffccc7';
+    document.body.appendChild(t);
+    setTimeout(() => t.remove(), 2300);
+  }
 
-    // 事件绑定
-    btnAdd.addEventListener('click', addItemHandler);
-    searchInput.addEventListener('input', renderGrid);
-    btnDeleteItem.addEventListener('click', () => currentItemId && deleteItemHandler(currentItemId));
-    btnModalClose.addEventListener('click', closeModal);
-    btnCopyPrompt.addEventListener('click', copyPrompt);
-    btnEdit.addEventListener('click', openEdit);
-    btnSaveEdit.addEventListener('click', saveEdit);
-    btnCancelEdit.addEventListener('click', () => editOverlay.style.display='none');
-    modalOverlay.addEventListener('click', (e) => { if(e.target === modalOverlay) closeModal(); });
-    editOverlay.addEventListener('click', (e) => { if(e.target === editOverlay) editOverlay.style.display='none'; });
-    document.addEventListener('keydown', (e) => { if(e.key === 'Escape') { closeModal(); editOverlay.style.display='none'; } });
-
-    btnExport.addEventListener('click', exportData);
-    btnImport.addEventListener('click', () => importFile.click());
-    importFile.addEventListener('change', () => { if(importFile.files[0]) importData(importFile.files[0]); });
-
-    // 启动
-    (async () => {
-      try {
-        await openDB();
-        await loadItems();
-        updateUIMode(); // 默认访客模式，body无admin-mode类
-        renderGrid();
-      } catch (e) {
-        showToast('数据库初始化失败，请检查浏览器设置', false);
-      }
-    })();
-  })();
+  // 初始化
+  updateAdminUI();
+  loadItems();
 </script>
 </body>
 </html>
