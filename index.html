@@ -121,6 +121,8 @@
       font-size: 0.7rem; margin-left: 6px; vertical-align: middle;
     }
   </style>
+  <!-- 本地化引入 supabase-js，不再依赖外部 CDN -->
+  <script src="js/supabase.min.js"></script>
 </head>
 <body>
 <div class="app-container">
@@ -224,15 +226,13 @@
   </div>
 </div>
 
-<script type="module">
-  import { createClient } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
-
+<script>
+  // 使用已经通过 <script> 标签加载的全局 supabase 对象
   const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
   const ADMIN_EMAIL = 'admin@wordvault.com';
-  // 密码由用户手动输入，不写死在代码里
 
-  const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+  const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
   let isAdmin = false;
   let currentCategory = 'rest';
