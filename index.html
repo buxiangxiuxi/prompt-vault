@@ -229,6 +229,7 @@
 
   const SUPABASE_URL = 'https://hgmzfxlaxifrrleargjt.supabase.co';
   const SUPABASE_ANON_KEY = 'sb_publishable_LuLPI2Y80_sVKH4We-XAkg__GuLCgXD';
+  const ADMIN_EMAIL = 'admin@wordvault.com';
   const ADMIN_PASSWORD = '5201314';
 
   const supabase = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -256,21 +257,37 @@
     }
   }
 
-  $('#adminLoginBtn').addEventListener('click', () => {
-    const pwd = prompt('请输入管理员密码：');
-    if (pwd === ADMIN_PASSWORD) {
-      isAdmin = true;
-      updateAdminUI();
-      showToast('已切换为管理员模式');
-    } else {
-      alert('密码错误');
+  // 管理员登录：用 Supabase Auth 登录
+  $('#adminLoginBtn').addEventListener('click', async () => {
+    const { error } = await supabase.auth.signInWithPassword({
+      email: ADMIN_EMAIL,
+      password: ADMIN_PASSWORD,
+    });
+    if (error) {
+      alert('管理员登录失败，请检查账号是否存在：' + error.message);
+      return;
     }
+    isAdmin = true;
+    updateAdminUI();
+    showToast('已切换为管理员模式');
   });
-  $('#adminLogoutBtn').addEventListener('click', () => {
+
+  // 管理员退出
+  $('#adminLogoutBtn').addEventListener('click', async () => {
+    await supabase.auth.signOut();
     isAdmin = false;
     updateAdminUI();
     showToast('已退出管理');
   });
+
+  // 检查页面加载时是否已有登录状态
+  async function checkSession() {
+    const { data: { session } } = await supabase.auth.getSession();
+    if (session && session.user.email === ADMIN_EMAIL) {
+      isAdmin = true;
+      updateAdminUI();
+    }
+  }
 
   async function loadItems() {
     const { data, error } = await supabase
@@ -460,13 +477,12 @@
       id: crypto.randomUUID ? crypto.randomUUID() : 'img_' + Date.now() + '_' + i,
       number: nextNum + i,
       category,
-      imagedata: imgData,   // ✅ 改为小写
+      imagedata: imgData,
       prompt
     }));
 
-    const { error } = await supabase.from('images').insert(rows, {
-      headers: { 'x-admin-password': ADMIN_PASSWORD }
-    });
+    // 现在不需要自定义 headers 了，用户已登录，RLS 会根据 email 放行
+    const { error } = await supabase.from('images').insert(rows);
 
     if (error) {
       showToast('保存失败：' + error.message, false);
@@ -487,9 +503,7 @@
     if (!item) return;
     const confirmText = prompt(`⚠️ 请输入"确认删除"来删除编号 #${item.number} 的图片：`);
     if (confirmText !== '确认删除') return showToast('取消删除', false);
-    const { error } = await supabase.from('images').delete().eq('id', id).headers({
-      'x-admin-password': ADMIN_PASSWORD
-    });
+    const { error } = await supabase.from('images').delete().eq('id', id);
     if (error) showToast('删除失败', false);
     else {
       closeModal();
@@ -501,7 +515,7 @@
   function openModal(id) {
     const item = allItems.find(i => i.id === id);
     if (!item) return;
-    $('#modalImage').src = item.imagedata;   // ✅ 改为小写
+    $('#modalImage').src = item.imagedata;
     $('#modalImage').style.display = 'block';
     $('#modalPlaceholder').style.display = 'none';
     const catNames = { rest: '休息的词库', sun: 'Sun的词库', gift: '赠词词库' };
@@ -563,7 +577,7 @@
     const { error } = await supabase.from('images').update({
       category: newCat,
       prompt: newPrompt
-    }).eq('id', id).headers({ 'x-admin-password': ADMIN_PASSWORD });
+    }).eq('id', id);
     if (error) showToast('修改失败', false);
     else {
       $('#editOverlay').style.display = 'none';
@@ -595,8 +609,8 @@
     setTimeout(() => t.remove(), 2300);
   }
 
-  // 初始化
-  updateAdminUI();
+  // 启动：检查会话，加载数据
+  checkSession();
   loadItems();
 </script>
 </body>
